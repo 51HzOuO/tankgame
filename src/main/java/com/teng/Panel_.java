@@ -241,38 +241,46 @@ public class Panel_ extends JPanel implements KeyListener {
             case KeyEvent.VK_W:
                 y -= RATE;
                 direct = 0;
+                repaint();
                 break;
             case KeyEvent.VK_S:
                 y += RATE;
                 direct = 2;
+                repaint();
                 break;
             case KeyEvent.VK_A:
                 x -= RATE;
                 direct = 3;
+                repaint();
                 break;
             case KeyEvent.VK_D:
                 x += RATE;
                 direct = 1;
+                repaint();
                 break;
             case KeyEvent.VK_NUMPAD1:
             case KeyEvent.VK_1:
                 RATE = 4;
+
                 break;
             case KeyEvent.VK_NUMPAD2:
             case KeyEvent.VK_2:
                 RATE = 8;
+
                 break;
             case KeyEvent.VK_NUMPAD3:
             case KeyEvent.VK_3:
                 RATE = 12;
+
                 break;
             case KeyEvent.VK_NUMPAD4:
             case KeyEvent.VK_4:
                 RATE = 16;
+
                 break;
 
         }
-        repaint();
+
     }
 
     @Override
