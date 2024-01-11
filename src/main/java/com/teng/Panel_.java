@@ -4,20 +4,32 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 import javax.swing.JPanel;
 import java.awt.AlphaComposite;
 
 public class Panel_ extends JPanel implements KeyListener {
+    Random random = new Random();
+    MyTank myTank;
 
-    MyTank myTank = new MyTank(100, 100, 0);
+    List<EnemyTank> enemyTanks = new Vector<>();
+
+    int enemyTankCount = 3;
 
     public Panel_() {
         this.setBackground(Color.GRAY);
+
+        myTank = new MyTank(100, 100, 0);
+        for (int i = 0; i < enemyTankCount; i++) {
+            enemyTanks.add(new EnemyTank(random.nextInt(1100), random.nextInt(700), random.nextInt(4)));
+        }
 
     }
 
@@ -59,11 +71,12 @@ public class Panel_ extends JPanel implements KeyListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Random random = new Random();
+
         Color_[] values = Color_.values();
-        g.setColor(getColor(values[random.nextInt(values.length)]));
         g.setFont(new java.awt.Font("宋体", 1, 30));
         g.drawString("wasd移动  1,2,3,4变速", 800, 50);
+        g.setColor(getColor(values[random.nextInt(values.length)]));
+        g.drawString("···", 10, 50);
         // Graphics2D g2d = (Graphics2D) g.create();
         // g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
         // g2d.setColor(setColor());
@@ -89,11 +102,20 @@ public class Panel_ extends JPanel implements KeyListener {
         g.drawImage(image, 100, 100, 108, 108, this);
 
         // moveTank();
-        drawTank(100 + x, 100 + y, g, direct, 0, Color_.RED);
+        drawTank(myTank.getX(), myTank.getY(), g, myTank.getDirect(), 0, Color_.RED);
 
-        drawTank(200, 0, g, 1, 1, values[random.nextInt(values.length)]);
-        drawTank(300, 0, g, 1, 1, values[random.nextInt(values.length)]);
-        drawTank(400, 0, g, 1, 1, values[random.nextInt(values.length)]);
+        // drawTank(enemyTanks.get(0).getX(), enemyTanks.get(0).getY(), g,
+        // enemyTanks.get(0).getDirect(), 0, Color_.BLACK);
+        // drawTank(enemyTanks.get(1).getX(), enemyTanks.get(1).getY(), g,
+        // enemyTanks.get(1).getDirect(), 0, Color_.BLACK);
+        // drawTank(enemyTanks.get(2).getX(), enemyTanks.get(2).getY(), g,
+        // enemyTanks.get(2).getDirect(), 0, Color_.BLACK);
+        for (EnemyTank enemyTank : enemyTanks) {
+            drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 0, Color_.BLACK);
+        }
+        // drawTank(200, 0, g, 1, 1, values[random.nextInt(values.length)]);
+        // drawTank(300, 0, g, 1, 1, values[random.nextInt(values.length)]);
+        // drawTank(400, 0, g, 1, 1, values[random.nextInt(values.length)]);
 
     }
 
@@ -158,7 +180,6 @@ public class Panel_ extends JPanel implements KeyListener {
         // g.setColor(Color.RED);
         // break;
         // }
-
         switch (direct) {
             case 0: // 上
                 Graphics2D g2d = (Graphics2D) g.create();
@@ -239,23 +260,23 @@ public class Panel_ extends JPanel implements KeyListener {
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
-                y -= RATE;
-                direct = 0;
+                myTank.moveUp(RATE);
+                myTank.setDirect(0);
                 repaint();
                 break;
             case KeyEvent.VK_S:
-                y += RATE;
-                direct = 2;
+                myTank.moveDown(RATE);
+                myTank.setDirect(2);
                 repaint();
                 break;
             case KeyEvent.VK_A:
-                x -= RATE;
-                direct = 3;
+                myTank.moveLeft(RATE);
+                myTank.setDirect(3);
                 repaint();
                 break;
             case KeyEvent.VK_D:
-                x += RATE;
-                direct = 1;
+                myTank.moveRight(RATE);
+                myTank.setDirect(1);
                 repaint();
                 break;
             case KeyEvent.VK_NUMPAD1:
