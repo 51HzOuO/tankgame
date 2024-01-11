@@ -24,7 +24,7 @@ public class Panel_ extends JPanel implements KeyListener {
     int x = 0;
     int y = 0;
     int direct = 0;
-    private static final int RATE = 5;
+    private int RATE = 4;
 
     @Override
     public void paint(Graphics g) {
@@ -59,6 +59,11 @@ public class Panel_ extends JPanel implements KeyListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        Random random = new Random();
+        Color_[] values = Color_.values();
+        g.setColor(getColor(values[random.nextInt(values.length)]));
+        g.setFont(new java.awt.Font("宋体", 1, 30));
+        g.drawString("wasd移动  1,2,3,4变速", 800, 50);
         // Graphics2D g2d = (Graphics2D) g.create();
         // g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
         // g2d.setColor(setColor());
@@ -84,43 +89,66 @@ public class Panel_ extends JPanel implements KeyListener {
         g.drawImage(image, 100, 100, 108, 108, this);
 
         // moveTank();
-        drawTank(100 + x * RATE, 100 + y * RATE, g, direct, 0, Color_.RED);
-        Color_[] values = Color_.values();
-        Random random = new Random();
+        drawTank(100 + x, 100 + y, g, direct, 0, Color_.RED);
+
         drawTank(200, 0, g, 1, 1, values[random.nextInt(values.length)]);
         drawTank(300, 0, g, 1, 1, values[random.nextInt(values.length)]);
         drawTank(400, 0, g, 1, 1, values[random.nextInt(values.length)]);
 
     }
 
-    public static void drawTank(int x, int y, Graphics g, int direct, int type, Color_ color) {
-
+    private static Color getColor(Color_ color) {
         switch (color) {
             case RED:
-                g.setColor(Color.RED);
-                break;
+                return Color.RED;
             case GREEN:
-                g.setColor(Color.GREEN);
-                break;
+                return Color.GREEN;
             case BLUE:
-                g.setColor(Color.BLUE);
-                break;
+                return Color.BLUE;
             case CYAN:
-                g.setColor(Color.CYAN);
-                break;
+                return Color.CYAN;
             case MAGENTA:
-                g.setColor(Color.MAGENTA);
-                break;
+                return Color.MAGENTA;
             case YELLOW:
-                g.setColor(Color.YELLOW);
-                break;
+                return Color.YELLOW;
             case BLACK:
-                g.setColor(Color.BLACK);
-                break;
+                return Color.BLACK;
             case WHITE:
-                g.setColor(Color.WHITE);
-                break;
+                return Color.WHITE;
+            default:
+                return Color.WHITE;
         }
+    }
+
+    public static void drawTank(int x, int y, Graphics g, int direct, int type, Color_ color) {
+
+        g.setColor(getColor(color));
+        // switch (color) {
+        // case RED:
+        // g.setColor(Color.RED);
+        // break;
+        // case GREEN:
+        // g.setColor(Color.GREEN);
+        // break;
+        // case BLUE:
+        // g.setColor(Color.BLUE);
+        // break;
+        // case CYAN:
+        // g.setColor(Color.CYAN);
+        // break;
+        // case MAGENTA:
+        // g.setColor(Color.MAGENTA);
+        // break;
+        // case YELLOW:
+        // g.setColor(Color.YELLOW);
+        // break;
+        // case BLACK:
+        // g.setColor(Color.BLACK);
+        // break;
+        // case WHITE:
+        // g.setColor(Color.WHITE);
+        // break;
+        // }
         // switch (type) {
 
         // case 0:
@@ -211,22 +239,38 @@ public class Panel_ extends JPanel implements KeyListener {
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
-                y -= 1;
+                y -= RATE;
                 direct = 0;
                 break;
             case KeyEvent.VK_S:
-                y += 1;
+                y += RATE;
                 direct = 2;
                 break;
             case KeyEvent.VK_A:
-                x -= 1;
+                x -= RATE;
                 direct = 3;
                 break;
             case KeyEvent.VK_D:
-                x += 1;
+                x += RATE;
                 direct = 1;
-
                 break;
+            case KeyEvent.VK_NUMPAD1:
+            case KeyEvent.VK_1:
+                RATE = 4;
+                break;
+            case KeyEvent.VK_NUMPAD2:
+            case KeyEvent.VK_2:
+                RATE = 8;
+                break;
+            case KeyEvent.VK_NUMPAD3:
+            case KeyEvent.VK_3:
+                RATE = 12;
+                break;
+            case KeyEvent.VK_NUMPAD4:
+            case KeyEvent.VK_4:
+                RATE = 16;
+                break;
+
         }
         repaint();
     }
