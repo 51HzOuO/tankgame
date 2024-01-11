@@ -213,24 +213,22 @@ public class Panel_ extends JPanel implements KeyListener {
             case KeyEvent.VK_W:
                 y -= 1;
                 direct = 0;
-                repaint();
                 break;
             case KeyEvent.VK_S:
                 y += 1;
                 direct = 2;
-                repaint();
                 break;
             case KeyEvent.VK_A:
                 x -= 1;
                 direct = 3;
-                repaint();
                 break;
             case KeyEvent.VK_D:
                 x += 1;
                 direct = 1;
-                repaint();
+
                 break;
         }
+        repaint();
     }
 
     @Override
