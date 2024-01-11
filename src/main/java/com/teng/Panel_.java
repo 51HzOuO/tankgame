@@ -21,9 +21,9 @@ public class Panel_ extends JPanel implements KeyListener {
 
     }
 
-    int x = 0;
-    int y = 0;
-    int direct = 0;
+    private int x = 0;
+    private int y = 0;
+    private int direct = 0;
     private int RATE = 4;
 
     @Override
