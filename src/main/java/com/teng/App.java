@@ -9,5 +9,6 @@ public class App {
         // window.move(sc.next());
         // }
 
+        System.out.println("Hello World!");
     }
 }
