@@ -4,31 +4,43 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 import javax.swing.JPanel;
 import java.awt.AlphaComposite;
 
 public class Panel_ extends JPanel implements KeyListener {
+    Random random = new Random();
+    MyTank myTank;
 
-    MyTank myTank = new MyTank(100, 100, 0);
+    List<EnemyTank> enemyTanks = new Vector<>();
+
+    int enemyTankCount = 3;
 
     public Panel_() {
         this.setBackground(Color.GRAY);
 
+        myTank = new MyTank(100, 100, 0);
+        for (int i = 0; i < enemyTankCount; i++) {
+            enemyTanks.add(new EnemyTank(random.nextInt(1100), random.nextInt(700), random.nextInt(4)));
+        }
+
     }
 
-    int x = 0;
-    int y = 0;
-    int direct = 0;
-    private static final int RATE = 5;
+    // private int x = 0;
+    // private int y = 0;
+    // private int direct = 0;
+    private int RATE = 4;
 
     @Override
     public void paint(Graphics g) {
-        // TODO Auto-generated method stub
         super.paint(g);
 
     }
@@ -59,6 +71,13 @@ public class Panel_ extends JPanel implements KeyListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        Color_[] values = Color_.values();
+        g.setFont(new java.awt.Font("宋体", 1, 30));
+        g.drawString("wasd移动  1,2,3,4变速", 800, 50);
+        g.drawString("j发射子弹", 800, 100);
+        g.setColor(getColor(values[random.nextInt(values.length)]));
+        g.drawString("···", 10, 50);
         // Graphics2D g2d = (Graphics2D) g.create();
         // g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
         // g2d.setColor(setColor());
@@ -84,43 +103,104 @@ public class Panel_ extends JPanel implements KeyListener {
         g.drawImage(image, 100, 100, 108, 108, this);
 
         // moveTank();
-        drawTank(100 + x * RATE, 100 + y * RATE, g, direct, 0, Color_.RED);
-        Color_[] values = Color_.values();
-        Random random = new Random();
-        drawTank(200, 0, g, 1, 1, values[random.nextInt(values.length)]);
-        drawTank(300, 0, g, 1, 1, values[random.nextInt(values.length)]);
-        drawTank(400, 0, g, 1, 1, values[random.nextInt(values.length)]);
+        drawTank(myTank.getX(), myTank.getY(), g, myTank.getDirect(), 0, Color_.RED);
+
+        // drawTank(enemyTanks.get(0).getX(), enemyTanks.get(0).getY(), g,
+        // enemyTanks.get(0).getDirect(), 0, Color_.BLACK);
+        // drawTank(enemyTanks.get(1).getX(), enemyTanks.get(1).getY(), g,
+        // enemyTanks.get(1).getDirect(), 0, Color_.BLACK);
+        // drawTank(enemyTanks.get(2).getX(), enemyTanks.get(2).getY(), g,
+        // enemyTanks.get(2).getDirect(), 0, Color_.BLACK);
+        for (EnemyTank enemyTank : enemyTanks) {
+            drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 0, Color_.BLACK);
+        }
+        for (Fire bullet : bullets) {
+            bullet.move(); // 更新子弹位置
+            bullet.draw(g); // 绘制子弹
+        }
+        bullets.removeIf(b -> b.x < 0 || b.x > getWidth() || b.y < 0 || b.y > getHeight());
+        repaint();
+        // drawTank(200, 0, g, 1, 1, values[random.nextInt(values.length)]);
+        // drawTank(300, 0, g, 1, 1, values[random.nextInt(values.length)]);
+        // drawTank(400, 0, g, 1, 1, values[random.nextInt(values.length)]);
 
     }
 
-    public static void drawTank(int x, int y, Graphics g, int direct, int type, Color_ color) {
-
+    private static Color getColor(Color_ color) {
         switch (color) {
             case RED:
-                g.setColor(Color.RED);
-                break;
+                return Color.RED;
             case GREEN:
-                g.setColor(Color.GREEN);
-                break;
+                return Color.GREEN;
             case BLUE:
-                g.setColor(Color.BLUE);
-                break;
+                return Color.BLUE;
             case CYAN:
-                g.setColor(Color.CYAN);
-                break;
+                return Color.CYAN;
             case MAGENTA:
-                g.setColor(Color.MAGENTA);
-                break;
+                return Color.MAGENTA;
             case YELLOW:
-                g.setColor(Color.YELLOW);
-                break;
+                return Color.YELLOW;
             case BLACK:
-                g.setColor(Color.BLACK);
-                break;
+                return Color.BLACK;
             case WHITE:
-                g.setColor(Color.WHITE);
+                return Color.WHITE;
+            default:
+                return Color.WHITE;
+        }
+    }
+
+    public Fire fire = null;
+
+    private List<Fire> bullets = new ArrayList<>();
+
+    private void fire(int x, int y, int direct) {
+        // Fire bullet = new Fire(x, y, direct);
+        switch (direct) {
+            case 0:
+                bullets.add(new Fire(x + 35, y, direct));
+                break;
+            case 1:
+                bullets.add(new Fire(x + 70, y + 35, direct));
+                break;
+            case 2:
+                bullets.add(new Fire(x + 35, y + 70, direct));
+                break;
+            case 3:
+                bullets.add(new Fire(x, y + 35, direct));
                 break;
         }
+
+    }
+
+    private void drawTank(int x, int y, Graphics g, int direct, int type, Color_ color) {
+
+        g.setColor(getColor(color));
+        // switch (color) {
+        // case RED:
+        // g.setColor(Color.RED);
+        // break;
+        // case GREEN:
+        // g.setColor(Color.GREEN);
+        // break;
+        // case BLUE:
+        // g.setColor(Color.BLUE);
+        // break;
+        // case CYAN:
+        // g.setColor(Color.CYAN);
+        // break;
+        // case MAGENTA:
+        // g.setColor(Color.MAGENTA);
+        // break;
+        // case YELLOW:
+        // g.setColor(Color.YELLOW);
+        // break;
+        // case BLACK:
+        // g.setColor(Color.BLACK);
+        // break;
+        // case WHITE:
+        // g.setColor(Color.WHITE);
+        // break;
+        // }
         // switch (type) {
 
         // case 0:
@@ -130,7 +210,6 @@ public class Panel_ extends JPanel implements KeyListener {
         // g.setColor(Color.RED);
         // break;
         // }
-
         switch (direct) {
             case 0: // 上
                 Graphics2D g2d = (Graphics2D) g.create();
@@ -211,26 +290,52 @@ public class Panel_ extends JPanel implements KeyListener {
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
-                y -= 1;
-                direct = 0;
-                repaint();
+                myTank.moveUp(RATE);
+                myTank.setDirect(0);
+                // repaint();
                 break;
             case KeyEvent.VK_S:
-                y += 1;
-                direct = 2;
-                repaint();
+                myTank.moveDown(RATE);
+                myTank.setDirect(2);
+                // repaint();
                 break;
             case KeyEvent.VK_A:
-                x -= 1;
-                direct = 3;
-                repaint();
+                myTank.moveLeft(RATE);
+                myTank.setDirect(3);
+                // repaint();
                 break;
             case KeyEvent.VK_D:
-                x += 1;
-                direct = 1;
-                repaint();
+                myTank.moveRight(RATE);
+                myTank.setDirect(1);
+                // repaint();
                 break;
+            case KeyEvent.VK_J:
+                fire(myTank.getX(), myTank.getY(), myTank.getDirect());
+                // repaint();
+                break;
+            case KeyEvent.VK_NUMPAD1:
+            case KeyEvent.VK_1:
+                RATE = 4;
+
+                break;
+            case KeyEvent.VK_NUMPAD2:
+            case KeyEvent.VK_2:
+                RATE = 8;
+
+                break;
+            case KeyEvent.VK_NUMPAD3:
+            case KeyEvent.VK_3:
+                RATE = 12;
+
+                break;
+            case KeyEvent.VK_NUMPAD4:
+            case KeyEvent.VK_4:
+                RATE = 16;
+
+                break;
+
         }
+
     }
 
     @Override

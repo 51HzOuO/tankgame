@@ -8,6 +8,6 @@ public class App {
         // while (true) {
         // window.move(sc.next());
         // }
-        System.out.println("JetBrains");
+        System.out.println("Hello World!");
     }
 }
