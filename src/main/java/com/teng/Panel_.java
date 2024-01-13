@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Vector;
@@ -33,9 +34,9 @@ public class Panel_ extends JPanel implements KeyListener {
 
     }
 
-    private int x = 0;
-    private int y = 0;
-    private int direct = 0;
+    // private int x = 0;
+    // private int y = 0;
+    // private int direct = 0;
     private int RATE = 4;
 
     @Override
@@ -113,6 +114,9 @@ public class Panel_ extends JPanel implements KeyListener {
         for (EnemyTank enemyTank : enemyTanks) {
             drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 0, Color_.BLACK);
         }
+        for (Fire bullet : bullets) {
+            bullet.draw(g);
+        }
         // drawTank(200, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // drawTank(300, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // drawTank(400, 0, g, 1, 1, values[random.nextInt(values.length)]);
@@ -142,7 +146,17 @@ public class Panel_ extends JPanel implements KeyListener {
         }
     }
 
-    public static void drawTank(int x, int y, Graphics g, int direct, int type, Color_ color) {
+    public Fire fire = null;
+
+    private List<Fire> bullets = new ArrayList<>();
+
+    private void fire(int x, int y, int direct) {
+        Fire bullet = new Fire(x, y, direct);
+        bullets.add(bullet);
+        new Thread(bullet).start();
+    }
+
+    private void drawTank(int x, int y, Graphics g, int direct, int type, Color_ color) {
 
         g.setColor(getColor(color));
         // switch (color) {
@@ -277,6 +291,10 @@ public class Panel_ extends JPanel implements KeyListener {
             case KeyEvent.VK_D:
                 myTank.moveRight(RATE);
                 myTank.setDirect(1);
+                repaint();
+                break;
+            case KeyEvent.VK_J:
+                fire(myTank.getX(), myTank.getY(), myTank.getDirect());
                 repaint();
                 break;
             case KeyEvent.VK_NUMPAD1:
