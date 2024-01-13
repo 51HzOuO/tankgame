@@ -76,6 +76,7 @@ public class Panel_ extends JPanel implements KeyListener {
         Color_[] values = Color_.values();
         g.setFont(new java.awt.Font("宋体", 1, 30));
         g.drawString("wasd移动  1,2,3,4变速", 800, 50);
+        g.drawString("j发射子弹", 800, 100);
         g.setColor(getColor(values[random.nextInt(values.length)]));
         g.drawString("···", 10, 50);
         // Graphics2D g2d = (Graphics2D) g.create();
@@ -115,8 +116,11 @@ public class Panel_ extends JPanel implements KeyListener {
             drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 0, Color_.BLACK);
         }
         for (Fire bullet : bullets) {
-            bullet.draw(g);
+            bullet.move(); // 更新子弹位置
+            bullet.draw(g); // 绘制子弹
         }
+        bullets.removeIf(b -> b.x < 0 || b.x > getWidth() || b.y < 0 || b.y > getHeight());
+        repaint();
         // drawTank(200, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // drawTank(300, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // drawTank(400, 0, g, 1, 1, values[random.nextInt(values.length)]);
@@ -151,9 +155,22 @@ public class Panel_ extends JPanel implements KeyListener {
     private List<Fire> bullets = new ArrayList<>();
 
     private void fire(int x, int y, int direct) {
-        Fire bullet = new Fire(x, y, direct);
-        bullets.add(bullet);
-        new Thread(bullet).start();
+        // Fire bullet = new Fire(x, y, direct);
+        switch (direct) {
+            case 0:
+                bullets.add(new Fire(x + 35, y, direct));
+                break;
+            case 1:
+                bullets.add(new Fire(x + 70, y + 35, direct));
+                break;
+            case 2:
+                bullets.add(new Fire(x + 35, y + 70, direct));
+                break;
+            case 3:
+                bullets.add(new Fire(x, y + 35, direct));
+                break;
+        }
+
     }
 
     private void drawTank(int x, int y, Graphics g, int direct, int type, Color_ color) {
@@ -276,26 +293,26 @@ public class Panel_ extends JPanel implements KeyListener {
             case KeyEvent.VK_W:
                 myTank.moveUp(RATE);
                 myTank.setDirect(0);
-                repaint();
+                // repaint();
                 break;
             case KeyEvent.VK_S:
                 myTank.moveDown(RATE);
                 myTank.setDirect(2);
-                repaint();
+                // repaint();
                 break;
             case KeyEvent.VK_A:
                 myTank.moveLeft(RATE);
                 myTank.setDirect(3);
-                repaint();
+                // repaint();
                 break;
             case KeyEvent.VK_D:
                 myTank.moveRight(RATE);
                 myTank.setDirect(1);
-                repaint();
+                // repaint();
                 break;
             case KeyEvent.VK_J:
                 fire(myTank.getX(), myTank.getY(), myTank.getDirect());
-                repaint();
+                // repaint();
                 break;
             case KeyEvent.VK_NUMPAD1:
             case KeyEvent.VK_1:
