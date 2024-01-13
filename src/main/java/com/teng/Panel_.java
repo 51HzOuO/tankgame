@@ -41,7 +41,6 @@ public class Panel_ extends JPanel implements KeyListener {
 
     @Override
     public void paint(Graphics g) {
-        // TODO Auto-generated method stub
         super.paint(g);
 
     }

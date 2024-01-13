@@ -1,5 +1,6 @@
 package com.teng;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 public class Fire {
@@ -31,6 +32,7 @@ public class Fire {
     }
 
     public void draw(Graphics g) {
+        g.setColor(Color.WHITE);
         g.fill3DRect(x, y, 5, 5, false);
     }
 }
