@@ -16,20 +16,26 @@ import java.util.Vector;
 import javax.swing.JPanel;
 import java.awt.AlphaComposite;
 
-public class Panel_ extends JPanel implements KeyListener {
+public class Panel_ extends JPanel implements KeyListener, Runnable {
     Random random = new Random();
     MyTank myTank;
 
     List<EnemyTank> enemyTanks = new Vector<>();
+    List<Fire> bullets = new ArrayList<>();
+
+    public void addBullet(Fire bullet) {
+        bullets.add(bullet);
+
+    }
 
     int enemyTankCount = 3;
 
     public Panel_() {
         this.setBackground(Color.GRAY);
 
-        myTank = new MyTank(100, 100, 0);
+        myTank = new MyTank(100, 100, 0, this);
         for (int i = 0; i < enemyTankCount; i++) {
-            enemyTanks.add(new EnemyTank(random.nextInt(1100), random.nextInt(700), random.nextInt(4)));
+            enemyTanks.add(new EnemyTank(random.nextInt(1100), random.nextInt(700), random.nextInt(4), this));
         }
 
     }
@@ -115,15 +121,12 @@ public class Panel_ extends JPanel implements KeyListener {
             drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 0, Color_.BLACK);
         }
         for (Fire bullet : bullets) {
-            bullet.move(); // 更新子弹位置
-            bullet.draw(g); // 绘制子弹
+            bullet.draw(g);
         }
-        bullets.removeIf(b -> b.x < 0 || b.x > getWidth() || b.y < 0 || b.y > getHeight());
-        repaint();
         // drawTank(200, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // drawTank(300, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // drawTank(400, 0, g, 1, 1, values[random.nextInt(values.length)]);
-
+        // repaint();
     }
 
     private static Color getColor(Color_ color) {
@@ -151,26 +154,7 @@ public class Panel_ extends JPanel implements KeyListener {
 
     public Fire fire = null;
 
-    private List<Fire> bullets = new ArrayList<>();
-
-    private void fire(int x, int y, int direct) {
-        // Fire bullet = new Fire(x, y, direct);
-        switch (direct) {
-            case 0:
-                bullets.add(new Fire(x + 35, y, direct));
-                break;
-            case 1:
-                bullets.add(new Fire(x + 70, y + 35, direct));
-                break;
-            case 2:
-                bullets.add(new Fire(x + 35, y + 70, direct));
-                break;
-            case 3:
-                bullets.add(new Fire(x, y + 35, direct));
-                break;
-        }
-
-    }
+    // private List<Fire> bullets = new ArrayList<>();
 
     private void drawTank(int x, int y, Graphics g, int direct, int type, Color_ color) {
 
@@ -310,7 +294,7 @@ public class Panel_ extends JPanel implements KeyListener {
                 // repaint();
                 break;
             case KeyEvent.VK_J:
-                fire(myTank.getX(), myTank.getY(), myTank.getDirect());
+                myTank.fire();
                 // repaint();
                 break;
             case KeyEvent.VK_NUMPAD1:
@@ -341,5 +325,17 @@ public class Panel_ extends JPanel implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
 
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                Thread.sleep(10); // 控制子弹移动速度
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            repaint();
+        }
     }
 }

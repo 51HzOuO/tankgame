@@ -13,6 +13,7 @@ public class Windows extends JFrame {
 
     public Windows() {
         this.setSize(1200, 800);
+        new Thread(panel).start();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(panel);
         this.setVisible(true);
