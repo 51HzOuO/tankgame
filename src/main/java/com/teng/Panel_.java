@@ -9,27 +9,40 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.JPanel;
+
 import java.awt.AlphaComposite;
 
-public class Panel_ extends JPanel implements KeyListener {
+public class Panel_ extends JPanel implements KeyListener, Runnable {
     Random random = new Random();
     MyTank myTank;
-
+    List<Fire> enemyBullets = new Vector<>();
     List<EnemyTank> enemyTanks = new Vector<>();
+    List<Fire> bullets = new ArrayList<>();
+
+    public void addBullet(Fire bullet) {
+        bullets.add(bullet);
+
+    }
+
+    public void addEnemyBullet(Fire bullet) {
+        enemyBullets.add(bullet);
+
+    }
 
     int enemyTankCount = 3;
 
     public Panel_() {
         this.setBackground(Color.GRAY);
 
-        myTank = new MyTank(100, 100, 0);
+        myTank = new MyTank(100, 100, 0, this);
         for (int i = 0; i < enemyTankCount; i++) {
-            enemyTanks.add(new EnemyTank(random.nextInt(1100), random.nextInt(700), random.nextInt(4)));
+            enemyTanks.add(new EnemyTank(random.nextInt(1100), random.nextInt(700), random.nextInt(4), this));
         }
 
     }
@@ -37,6 +50,9 @@ public class Panel_ extends JPanel implements KeyListener {
     // private int x = 0;
     // private int y = 0;
     // private int direct = 0;
+    int originBulletLimit = 3;
+    int killCount = 0;
+    int bulletLimit = originBulletLimit + killCount;
     private int RATE = 4;
 
     @Override
@@ -67,6 +83,7 @@ public class Panel_ extends JPanel implements KeyListener {
     // }
 
     // }
+    Color_[] values = Color_.values();
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -76,6 +93,8 @@ public class Panel_ extends JPanel implements KeyListener {
         g.setFont(new java.awt.Font("宋体", 1, 30));
         g.drawString("wasd移动  1,2,3,4变速", 800, 50);
         g.drawString("j发射子弹", 800, 100);
+        g.drawString("当前可发射子弹数：" + (bulletLimit - bullets.size()) + "/" + originBulletLimit, 800, 150);
+        g.drawString("EXTRA BULLET:" + killCount, 800, 200);
         g.setColor(getColor(values[random.nextInt(values.length)]));
         g.drawString("···", 10, 50);
         // Graphics2D g2d = (Graphics2D) g.create();
@@ -112,18 +131,20 @@ public class Panel_ extends JPanel implements KeyListener {
         // drawTank(enemyTanks.get(2).getX(), enemyTanks.get(2).getY(), g,
         // enemyTanks.get(2).getDirect(), 0, Color_.BLACK);
         for (EnemyTank enemyTank : enemyTanks) {
-            drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 0, Color_.BLACK);
+            drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 1, Color_.BLACK);
+
         }
         for (Fire bullet : bullets) {
-            bullet.move(); // 更新子弹位置
-            bullet.draw(g); // 绘制子弹
+            bullet.draw(g);
         }
-        bullets.removeIf(b -> b.x < 0 || b.x > getWidth() || b.y < 0 || b.y > getHeight());
-        repaint();
+
+        for (Fire bullet : enemyBullets) {
+            bullet.draw(g);
+        }
         // drawTank(200, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // drawTank(300, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // drawTank(400, 0, g, 1, 1, values[random.nextInt(values.length)]);
-
+        // repaint();
     }
 
     private static Color getColor(Color_ color) {
@@ -151,26 +172,7 @@ public class Panel_ extends JPanel implements KeyListener {
 
     public Fire fire = null;
 
-    private List<Fire> bullets = new ArrayList<>();
-
-    private void fire(int x, int y, int direct) {
-        // Fire bullet = new Fire(x, y, direct);
-        switch (direct) {
-            case 0:
-                bullets.add(new Fire(x + 35, y, direct));
-                break;
-            case 1:
-                bullets.add(new Fire(x + 70, y + 35, direct));
-                break;
-            case 2:
-                bullets.add(new Fire(x + 35, y + 70, direct));
-                break;
-            case 3:
-                bullets.add(new Fire(x, y + 35, direct));
-                break;
-        }
-
-    }
+    // private List<Fire> bullets = new ArrayList<>();
 
     private void drawTank(int x, int y, Graphics g, int direct, int type, Color_ color) {
 
@@ -222,6 +224,9 @@ public class Panel_ extends JPanel implements KeyListener {
 
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
                 g2d.fillOval(x + 20, y + 35, 30, 30);
+                if (type == 0) {
+                    g2d.setColor(getColor(values[random.nextInt(values.length)]));
+                }
                 g2d.fill3DRect(x + 35, y, 4, 50, false);
 
                 g2d.dispose();
@@ -238,6 +243,9 @@ public class Panel_ extends JPanel implements KeyListener {
 
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
                 g2d.fillOval(x + 35, y + 20, 30, 30);
+                if (type == 0) {
+                    g2d.setColor(getColor(values[random.nextInt(values.length)]));
+                }
                 g2d.fillRect(x + 50, y + 35, 50, 4);
 
                 g2d.dispose();
@@ -254,6 +262,9 @@ public class Panel_ extends JPanel implements KeyListener {
 
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
                 g2d.fillOval(x + 20, y + 35, 30, 30);
+                if (type == 0) {
+                    g2d.setColor(getColor(values[random.nextInt(values.length)]));
+                }
                 g2d.fillRect(x + 35, y + 50, 4, 50);
 
                 g2d.dispose();
@@ -270,6 +281,9 @@ public class Panel_ extends JPanel implements KeyListener {
 
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
                 g2d.fillOval(x + 35, y + 20, 30, 30);
+                if (type == 0) {
+                    g2d.setColor(getColor(values[random.nextInt(values.length)]));
+                }
                 g2d.fillRect(x, y + 35, 50, 4);
 
                 g2d.dispose();
@@ -310,7 +324,7 @@ public class Panel_ extends JPanel implements KeyListener {
                 // repaint();
                 break;
             case KeyEvent.VK_J:
-                fire(myTank.getX(), myTank.getY(), myTank.getDirect());
+                myTank.fire();
                 // repaint();
                 break;
             case KeyEvent.VK_NUMPAD1:
@@ -341,5 +355,62 @@ public class Panel_ extends JPanel implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
 
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for (Fire bullet : bullets) {
+                Iterator<EnemyTank> iterator = enemyTanks.iterator();
+                while (iterator.hasNext()) {
+                    EnemyTank enemyTank = iterator.next();
+                    if (hitTank(bullet, enemyTank)) {
+                        iterator.remove();
+                        bullet.isLive = false;
+                        enemyTank.isLive = false;
+                        killCount++;
+                        System.out.println("功德+1");
+                        bulletLimit = originBulletLimit + killCount;
+                        break;
+                    }
+                }
+                // for (EnemyTank enemyTank : enemyTanks) {
+                // if (hitTank(bullet, enemyTank)) {
+                // enemyTanks.remove(enemyTank);
+                // bullets.remove(bullet);
+                // bullet.isLive = false;
+                // killCount++;
+                // bulletLimit = originBulletLimit + killCount;
+                // break;
+                // }
+                // }
+            }
+            repaint();
+        }
+    }
+
+    public boolean hitTank(Fire bullet, Tank tank) {
+        switch (tank.getDirect()) {
+            case 0:
+            case 2:
+                if (bullet.x > tank.getX() && bullet.x < tank.getX() + 70 && bullet.y > tank.getY()
+                        && bullet.y < tank.getY() + 100) {
+                    return true;
+                }
+                break;
+            case 1:
+            case 3:
+                if (bullet.x > tank.getX() && bullet.x < tank.getX() + 100 && bullet.y > tank.getY()
+                        && bullet.y < tank.getY() + 70) {
+                    return true;
+                }
+                break;
+        }
+        return false;
     }
 }
