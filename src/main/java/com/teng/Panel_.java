@@ -374,6 +374,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
                         bullet.isLive = false;
                         enemyTank.isLive = false;
                         killCount++;
+                        System.out.println("功德+1");
                         bulletLimit = originBulletLimit + killCount;
                         break;
                     }
