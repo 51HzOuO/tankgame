@@ -14,13 +14,20 @@ public class EnemyTank extends Tank implements Runnable {
         new Thread(this).start();
     }
 
+    boolean isLive = true;
+
     @Override
     public void run() {
         Random random = new Random();
-        while (true) {
+        int lastDirect = direct;
+        while (isLive) {
             try {
-                Thread.sleep(random.nextInt(5000) + 2000);
+
+                if (Math.random() > 0.5) {
+                    direct = random.nextInt(4);
+                }
                 fire();
+                Thread.sleep(random.nextInt(5000) + 2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

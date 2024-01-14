@@ -16,21 +16,25 @@ public class Fire implements Runnable {
         this.direct = direct;
     }
 
+    public boolean isLive = true;
+
     @Override
     public void run() {
         // 移动逻辑...
-        while (shouldContinueMoving()) {
+        while (shouldContinueMoving() && isLive) {
             move();
             try {
                 Thread.sleep(5); // 控制子弹移动速度
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
         Panel_ p = (Panel_) panel;
         p.enemyBullets.remove(this);
-        p.bullets.remove(this);
-        System.out.println("功德+1");
+        if (p.bullets.remove(this)) {
+            System.out.println("功德+1");
+        }
+
     }
 
     private boolean shouldContinueMoving() {

@@ -35,7 +35,7 @@ public class MyTank extends Tank {
         }
         bullet.setPanel(this.panel);
         if (panel instanceof Panel_) {
-            ((Panel_) panel).addEnemyBullet(bullet);
+            ((Panel_) panel).addBullet(bullet);
         }
         new Thread(bullet).start();
     }

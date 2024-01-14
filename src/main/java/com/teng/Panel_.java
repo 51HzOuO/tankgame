@@ -9,11 +9,13 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.JPanel;
+
 import java.awt.AlphaComposite;
 
 public class Panel_ extends JPanel implements KeyListener, Runnable {
@@ -81,6 +83,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     // }
 
     // }
+    Color_[] values = Color_.values();
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -128,7 +131,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         // drawTank(enemyTanks.get(2).getX(), enemyTanks.get(2).getY(), g,
         // enemyTanks.get(2).getDirect(), 0, Color_.BLACK);
         for (EnemyTank enemyTank : enemyTanks) {
-            drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 0, Color_.BLACK);
+            drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 1, Color_.BLACK);
 
         }
         for (Fire bullet : bullets) {
@@ -221,6 +224,9 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
 
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
                 g2d.fillOval(x + 20, y + 35, 30, 30);
+                if (type == 0) {
+                    g2d.setColor(getColor(values[random.nextInt(values.length)]));
+                }
                 g2d.fill3DRect(x + 35, y, 4, 50, false);
 
                 g2d.dispose();
@@ -237,6 +243,9 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
 
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
                 g2d.fillOval(x + 35, y + 20, 30, 30);
+                if (type == 0) {
+                    g2d.setColor(getColor(values[random.nextInt(values.length)]));
+                }
                 g2d.fillRect(x + 50, y + 35, 50, 4);
 
                 g2d.dispose();
@@ -253,6 +262,9 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
 
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
                 g2d.fillOval(x + 20, y + 35, 30, 30);
+                if (type == 0) {
+                    g2d.setColor(getColor(values[random.nextInt(values.length)]));
+                }
                 g2d.fillRect(x + 35, y + 50, 4, 50);
 
                 g2d.dispose();
@@ -269,6 +281,9 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
 
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
                 g2d.fillOval(x + 35, y + 20, 30, 30);
+                if (type == 0) {
+                    g2d.setColor(getColor(values[random.nextInt(values.length)]));
+                }
                 g2d.fillRect(x, y + 35, 50, 4);
 
                 g2d.dispose();
@@ -350,7 +365,51 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            for (Fire bullet : bullets) {
+                Iterator<EnemyTank> iterator = enemyTanks.iterator();
+                while (iterator.hasNext()) {
+                    EnemyTank enemyTank = iterator.next();
+                    if (hitTank(bullet, enemyTank)) {
+                        iterator.remove();
+                        bullet.isLive = false;
+                        enemyTank.isLive = false;
+                        killCount++;
+                        bulletLimit = originBulletLimit + killCount;
+                        break;
+                    }
+                }
+                // for (EnemyTank enemyTank : enemyTanks) {
+                // if (hitTank(bullet, enemyTank)) {
+                // enemyTanks.remove(enemyTank);
+                // bullets.remove(bullet);
+                // bullet.isLive = false;
+                // killCount++;
+                // bulletLimit = originBulletLimit + killCount;
+                // break;
+                // }
+                // }
+            }
             repaint();
         }
+    }
+
+    public boolean hitTank(Fire bullet, Tank tank) {
+        switch (tank.getDirect()) {
+            case 0:
+            case 2:
+                if (bullet.x > tank.getX() && bullet.x < tank.getX() + 70 && bullet.y > tank.getY()
+                        && bullet.y < tank.getY() + 100) {
+                    return true;
+                }
+                break;
+            case 1:
+            case 3:
+                if (bullet.x > tank.getX() && bullet.x < tank.getX() + 100 && bullet.y > tank.getY()
+                        && bullet.y < tank.getY() + 70) {
+                    return true;
+                }
+                break;
+        }
+        return false;
     }
 }
