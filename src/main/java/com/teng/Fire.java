@@ -28,8 +28,9 @@ public class Fire implements Runnable {
             }
         }
         Panel_ p = (Panel_) panel;
+        p.enemyBullets.remove(this);
         p.bullets.remove(this);
-        System.out.println("子弹线程结束");
+        System.out.println("功德+1");
     }
 
     private boolean shouldContinueMoving() {

@@ -13,7 +13,7 @@ public class MyTank extends Tank {
 
         Fire bullet;
         if (panel instanceof Panel_) {
-            if (((Panel_) panel).bullets.size() >= 2) {
+            if (((Panel_) panel).bullets.size() >= ((Panel_) panel).bulletLimit) {
                 return;
             }
         }
@@ -22,10 +22,10 @@ public class MyTank extends Tank {
                 bullet = new Fire(x + 35, y, direct);
                 break;
             case 1:
-                bullet = new Fire(x + 70, y + 35, direct);
+                bullet = new Fire(x + 95, y + 35, direct);
                 break;
             case 2:
-                bullet = new Fire(x + 35, y + 70, direct);
+                bullet = new Fire(x + 35, y + 95, direct);
                 break;
             case 3:
                 bullet = new Fire(x, y + 35, direct);
@@ -34,9 +34,8 @@ public class MyTank extends Tank {
                 return;
         }
         bullet.setPanel(this.panel);
-
         if (panel instanceof Panel_) {
-            ((Panel_) panel).addBullet(bullet);
+            ((Panel_) panel).addEnemyBullet(bullet);
         }
         new Thread(bullet).start();
     }

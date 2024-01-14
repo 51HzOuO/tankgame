@@ -1,17 +1,37 @@
 package com.teng;
 
+import java.util.Random;
+import java.util.Vector;
+
 import javax.swing.JPanel;
 
-public class EnemyTank extends Tank {
+public class EnemyTank extends Tank implements Runnable {
+
+    Vector<Fire> fires = new Vector<Fire>();
 
     public EnemyTank(int x, int y, int direct, JPanel panel) {
         super(x, y, direct, panel);
+        new Thread(this).start();
     }
+
+    @Override
+    public void run() {
+        Random random = new Random();
+        while (true) {
+            try {
+                Thread.sleep(random.nextInt(5000) + 2000);
+                fire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    Panel_ p = (Panel_) panel;
 
     @Override
     public void fire() {
         Fire bullet;
-
         // 实现特定于 EnemyTank 的射击逻辑
         // 例如，EnemyTank 可以在特定条件下自动射击
         // 这里只是一个简单的实现示例
@@ -20,10 +40,10 @@ public class EnemyTank extends Tank {
                 bullet = new Fire(x + 35, y, direct);
                 break;
             case 1:
-                bullet = new Fire(x + 70, y + 35, direct);
+                bullet = new Fire(x + 95, y + 35, direct);
                 break;
             case 2:
-                bullet = new Fire(x + 35, y + 70, direct);
+                bullet = new Fire(x + 35, y + 95, direct);
                 break;
             case 3:
                 bullet = new Fire(x, y + 35, direct);
@@ -33,7 +53,7 @@ public class EnemyTank extends Tank {
         }
         bullet.setPanel(this.panel);
         if (panel instanceof Panel_) {
-            ((Panel_) panel).addBullet(bullet);
+            ((Panel_) panel).addEnemyBullet(bullet);
         }
         new Thread(bullet).start();
     }

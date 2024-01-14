@@ -19,12 +19,17 @@ import java.awt.AlphaComposite;
 public class Panel_ extends JPanel implements KeyListener, Runnable {
     Random random = new Random();
     MyTank myTank;
-
+    List<Fire> enemyBullets = new Vector<>();
     List<EnemyTank> enemyTanks = new Vector<>();
     List<Fire> bullets = new ArrayList<>();
 
     public void addBullet(Fire bullet) {
         bullets.add(bullet);
+
+    }
+
+    public void addEnemyBullet(Fire bullet) {
+        enemyBullets.add(bullet);
 
     }
 
@@ -43,6 +48,9 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     // private int x = 0;
     // private int y = 0;
     // private int direct = 0;
+    int originBulletLimit = 3;
+    int killCount = 0;
+    int bulletLimit = originBulletLimit + killCount;
     private int RATE = 4;
 
     @Override
@@ -82,6 +90,8 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         g.setFont(new java.awt.Font("宋体", 1, 30));
         g.drawString("wasd移动  1,2,3,4变速", 800, 50);
         g.drawString("j发射子弹", 800, 100);
+        g.drawString("当前可发射子弹数：" + (bulletLimit - bullets.size()) + "/" + originBulletLimit, 800, 150);
+        g.drawString("EXTRA BULLET:" + killCount, 800, 200);
         g.setColor(getColor(values[random.nextInt(values.length)]));
         g.drawString("···", 10, 50);
         // Graphics2D g2d = (Graphics2D) g.create();
@@ -119,8 +129,13 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         // enemyTanks.get(2).getDirect(), 0, Color_.BLACK);
         for (EnemyTank enemyTank : enemyTanks) {
             drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 0, Color_.BLACK);
+
         }
         for (Fire bullet : bullets) {
+            bullet.draw(g);
+        }
+
+        for (Fire bullet : enemyBullets) {
             bullet.draw(g);
         }
         // drawTank(200, 0, g, 1, 1, values[random.nextInt(values.length)]);
@@ -331,7 +346,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     public void run() {
         while (true) {
             try {
-                Thread.sleep(10); // 控制子弹移动速度
+                Thread.sleep(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
