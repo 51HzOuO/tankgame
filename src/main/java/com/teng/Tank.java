@@ -16,18 +16,30 @@ public abstract class Tank {
     }
 
     public void moveUp(int RATE) {
+        if (y <= 0) {
+            return;
+        }
         y -= RATE;
     }
 
     public void moveDown(int RATE) {
+        if (y >= panel.getHeight() - 100) {
+            return;
+        }
         y += RATE;
     }
 
     public void moveLeft(int RATE) {
+        if (x <= 0) {
+            return;
+        }
         x -= RATE;
     }
 
     public void moveRight(int RATE) {
+        if (x >= panel.getWidth() - 100) {
+            return;
+        }
         x += RATE;
     }
 

@@ -8,7 +8,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -23,7 +22,16 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     MyTank myTank;
     List<Fire> enemyBullets = new Vector<>();
     List<EnemyTank> enemyTanks = new Vector<>();
-    List<Fire> bullets = new ArrayList<>();
+    List<Fire> bullets = new Vector<>();
+
+    List<Bomb> bombs = new Vector<>();
+
+    Image[] images = new Image[36];
+    {
+        for (int i = 0; i < 36; i++) {
+            images[i] = Toolkit.getDefaultToolkit().getImage("pic/ht/" + (i + 1) + ".png");
+        }
+    }
 
     public void addBullet(Fire bullet) {
         bullets.add(bullet);
@@ -35,7 +43,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
 
     }
 
-    int enemyTankCount = 3;
+    int enemyTankCount = 10;
 
     public Panel_() {
         this.setBackground(Color.GRAY);
@@ -94,7 +102,8 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         g.drawString("wasd移动  1,2,3,4变速", 800, 50);
         g.drawString("j发射子弹", 800, 100);
         g.drawString("当前可发射子弹数：" + (bulletLimit - bullets.size()) + "/" + originBulletLimit, 800, 150);
-        g.drawString("EXTRA BULLET:" + killCount, 800, 200);
+        g.drawString("EXTRA BULLET:" + killCount / 2, 800, 200);
+        g.drawString("KILL COUNT:" + killCount, 800, 250);
         g.setColor(getColor(values[random.nextInt(values.length)]));
         g.drawString("···", 10, 50);
         // Graphics2D g2d = (Graphics2D) g.create();
@@ -130,9 +139,16 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         // enemyTanks.get(1).getDirect(), 0, Color_.BLACK);
         // drawTank(enemyTanks.get(2).getX(), enemyTanks.get(2).getY(), g,
         // enemyTanks.get(2).getDirect(), 0, Color_.BLACK);
+        int index = -1;
         for (EnemyTank enemyTank : enemyTanks) {
-            drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 1, Color_.BLACK);
-
+            if (enemyTank.isLive) {
+                drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 1, Color_.BLACK);
+            } else {
+                index = enemyTanks.indexOf(enemyTank);
+            }
+        }
+        if (index != -1) {
+            enemyTanks.remove(index);
         }
         for (Fire bullet : bullets) {
             bullet.draw(g);
@@ -141,6 +157,16 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         for (Fire bullet : enemyBullets) {
             bullet.draw(g);
         }
+
+        for (int i = 0; i < bombs.size(); i++) {
+            Bomb bomb = bombs.get(i);
+            if (bomb.isLive) {
+                bomb.draw(g);
+            } else {
+                bombs.remove(bomb);
+            }
+        }
+
         // drawTank(200, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // drawTank(300, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // drawTank(400, 0, g, 1, 1, values[random.nextInt(values.length)]);
@@ -365,32 +391,64 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            for (Fire bullet : bullets) {
-                Iterator<EnemyTank> iterator = enemyTanks.iterator();
-                while (iterator.hasNext()) {
-                    EnemyTank enemyTank = iterator.next();
+            Iterator<Fire> bulletIterator = bullets.iterator();
+            while (bulletIterator.hasNext()) {
+                Fire bullet = bulletIterator.next();
+                Iterator<EnemyTank> tankIterator = enemyTanks.iterator();
+
+                while (tankIterator.hasNext()) {
+                    EnemyTank enemyTank = tankIterator.next();
                     if (hitTank(bullet, enemyTank)) {
-                        iterator.remove();
-                        bullet.isLive = false;
-                        enemyTank.isLive = false;
+                        // 移除击中的敌方坦克
                         killCount++;
+                        Bomb bomb = new Bomb(enemyTank.getX(), enemyTank.getY());
+                        bomb.setP(this);
+                        bombs.add(bomb);
+                        // tankIterator.remove();
+                        // 移除我方子弹
+                        bullet.isLive = false;
+
+                        // 敌方坦克的其他逻辑
+                        enemyTank.isLive = false;
+
                         System.out.println("功德+1");
                         bulletLimit = originBulletLimit + killCount;
-                        break;
+                        break; // 跳出内层循环，继续检查下一个子弹
                     }
                 }
-                // for (EnemyTank enemyTank : enemyTanks) {
-                // if (hitTank(bullet, enemyTank)) {
-                // enemyTanks.remove(enemyTank);
-                // bullets.remove(bullet);
-                // bullet.isLive = false;
-                // killCount++;
-                // bulletLimit = originBulletLimit + killCount;
-                // break;
-                // }
-                // }
             }
             repaint();
+
+            // for (Fire bullet : bullets) {
+            // Iterator<EnemyTank> iterator = enemyTanks.iterator();
+            // while (iterator.hasNext()) {
+            // EnemyTank enemyTank = iterator.next();
+            // if (hitTank(bullet, enemyTank)) {
+            // iterator.remove();
+            // bullet.isLive = false;// 我方子弹的线程
+            // enemyTank.isLive = false;// 敌方坦克的射击线程
+            // killCount++;
+            // Bomb bomb = new Bomb(enemyTank.getX(), enemyTank.getY());
+            // bomb.setP(this);
+            // bombs.add(bomb);
+            // System.out.println("功德+1");
+            // bulletLimit = originBulletLimit + killCount;
+            // break;
+            // }
+            // }
+            // // for (EnemyTank enemyTank : enemyTanks) {
+            // // if (hitTank(bullet, enemyTank)) {
+            // // enemyTanks.remove(enemyTank);
+            // // bullets.remove(bullet);
+            // // bullet.isLive = false;
+            // // killCount++;
+            // // bulletLimit = originBulletLimit + killCount;
+            // // break;
+            // // }
+            // // }
+            // }
+            // repaint();
+
         }
     }
 

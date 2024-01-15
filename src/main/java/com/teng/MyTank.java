@@ -13,7 +13,7 @@ public class MyTank extends Tank {
 
         Fire bullet;
         if (panel instanceof Panel_) {
-            if (((Panel_) panel).bullets.size() >= ((Panel_) panel).bulletLimit) {
+            if (((Panel_) panel).bullets.size() == ((Panel_) panel).bulletLimit) {
                 return;
             }
         }
