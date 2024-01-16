@@ -4,8 +4,58 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4e67e57d-434b-4fb4-b846-504caa3e3ab5" name="Changes" comment="">
+    <list default="true" id="4e67e57d-434b-4fb4-b846-504caa3e3ab5" name="Changes" comment="go to idea">
+      <change afterPath="$PROJECT_DIR$/pic/ht/1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/10.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/11.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/12.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/13.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/14.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/15.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/16.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/17.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/18.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/19.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/20.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/21.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/22.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/23.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/24.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/25.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/26.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/27.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/28.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/29.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/30.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/31.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/32.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/33.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/34.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/35.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/36.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/6.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/7.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/8.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pic/ht/9.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/teng/Bomb.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/teng/Bomb.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/teng/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teng/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/teng/EnemyTank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teng/EnemyTank.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/teng/MyTank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teng/MyTank.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/teng/Panel_.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teng/Panel_.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/teng/Tank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teng/Tank.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/teng/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teng/App.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/teng/EnemyTank.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teng/EnemyTank.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/teng/MyTank.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teng/MyTank.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/teng/Panel_$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teng/Panel_$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/teng/Panel_.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teng/Panel_.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/teng/Tank.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teng/Tank.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,28 +81,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Application.App.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/51Hz/Desktop/Demo/tankgame&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Application.App.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "Merging main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/51Hz/Desktop/Demo/tankgame",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -79,5 +129,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="go to idea" />
+    <option name="LAST_COMMIT_MESSAGE" value="go to idea" />
   </component>
 </project>

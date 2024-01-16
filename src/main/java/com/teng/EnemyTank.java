@@ -19,19 +19,35 @@ public class EnemyTank extends Tank implements Runnable {
     @Override
     public void run() {
         Random random = new Random();
-        int lastDirect = direct;
         while (isLive) {
             try {
 
-                if (Math.random() > 0.5) {
+                if (random.nextInt(10) < 3) {
                     direct = random.nextInt(4);
                 }
+                switch (direct) {
+                    case 0:
+                        moveUp(4);
+                        break;
+                    case 1:
+                        moveRight(4);
+                        break;
+                    case 2:
+                        moveDown(4);
+                        break;
+                    case 3:
+                        moveLeft(4);
+                        break;
+                }
+
+                Thread.sleep(random.nextInt(1000) + 1000);
                 fire();
-                Thread.sleep(random.nextInt(5000) + 2000);
+                Thread.sleep(random.nextInt(1000) + 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
     }
 
     Panel_ p = (Panel_) panel;

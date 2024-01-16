@@ -1,41 +1,39 @@
 package com.teng;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
-import javax.swing.JPanel;
-
-import java.awt.AlphaComposite;
-
 public class Panel_ extends JPanel implements KeyListener, Runnable {
+    public Fire fire = null;
     Random random = new Random();
     MyTank myTank;
     List<Fire> enemyBullets = new Vector<>();
     List<EnemyTank> enemyTanks = new Vector<>();
-    List<Fire> bullets = new ArrayList<>();
+    List<Fire> bullets = new Vector<>();
+    List<Bomb> bombs = new Vector<>();
+    Image[] images = new Image[36];
+    int enemyTankCount = 10;
+    // private int x = 0;
+    // private int y = 0;
+    // private int direct = 0;
+    int originBulletLimit = 3;
+    int killCount = 0;
+    int bulletLimit = originBulletLimit + killCount;
+    // }
+    Color_[] values = Color_.values();
+    private int RATE = 4;
 
-    public void addBullet(Fire bullet) {
-        bullets.add(bullet);
-
+    {
+        for (int i = 0; i < 36; i++) {
+            images[i] = Toolkit.getDefaultToolkit().getImage("pic/ht/" + (i + 1) + ".png");
+        }
     }
-
-    public void addEnemyBullet(Fire bullet) {
-        enemyBullets.add(bullet);
-
-    }
-
-    int enemyTankCount = 3;
 
     public Panel_() {
         this.setBackground(Color.GRAY);
@@ -47,18 +45,27 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
 
     }
 
-    // private int x = 0;
-    // private int y = 0;
-    // private int direct = 0;
-    int originBulletLimit = 3;
-    int killCount = 0;
-    int bulletLimit = originBulletLimit + killCount;
-    private int RATE = 4;
-
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-
+    private static Color getColor(Color_ color) {
+        switch (color) {
+            case RED:
+                return Color.RED;
+            case GREEN:
+                return Color.GREEN;
+            case BLUE:
+                return Color.BLUE;
+            case CYAN:
+                return Color.CYAN;
+            case MAGENTA:
+                return Color.MAGENTA;
+            case YELLOW:
+                return Color.YELLOW;
+            case BLACK:
+                return Color.BLACK;
+            case WHITE:
+                return Color.WHITE;
+            default:
+                return Color.WHITE;
+        }
     }
 
     // public void moveTank(String key) {
@@ -82,8 +89,21 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     // break;
     // }
 
-    // }
-    Color_[] values = Color_.values();
+    public void addBullet(Fire bullet) {
+        bullets.add(bullet);
+
+    }
+
+    public void addEnemyBullet(Fire bullet) {
+        enemyBullets.add(bullet);
+
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -94,7 +114,8 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         g.drawString("wasd移动  1,2,3,4变速", 800, 50);
         g.drawString("j发射子弹", 800, 100);
         g.drawString("当前可发射子弹数：" + (bulletLimit - bullets.size()) + "/" + originBulletLimit, 800, 150);
-        g.drawString("EXTRA BULLET:" + killCount, 800, 200);
+        g.drawString("EXTRA BULLET:" + killCount / 2, 800, 200);
+        g.drawString("KILL COUNT:" + killCount, 800, 250);
         g.setColor(getColor(values[random.nextInt(values.length)]));
         g.drawString("···", 10, 50);
         // Graphics2D g2d = (Graphics2D) g.create();
@@ -122,17 +143,27 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         g.drawImage(image, 100, 100, 108, 108, this);
 
         // moveTank();
-        drawTank(myTank.getX(), myTank.getY(), g, myTank.getDirect(), 0, Color_.RED);
-
+        if (myTank.isLive) drawTank(myTank.getX(), myTank.getY(), g, myTank.getDirect(), 0, Color_.RED);
+        else {
+            g.setFont(new java.awt.Font("宋体", 1, 100));
+            g.drawString("GAMEOVER", 300, 300);
+        }
         // drawTank(enemyTanks.get(0).getX(), enemyTanks.get(0).getY(), g,
         // enemyTanks.get(0).getDirect(), 0, Color_.BLACK);
         // drawTank(enemyTanks.get(1).getX(), enemyTanks.get(1).getY(), g,
         // enemyTanks.get(1).getDirect(), 0, Color_.BLACK);
         // drawTank(enemyTanks.get(2).getX(), enemyTanks.get(2).getY(), g,
         // enemyTanks.get(2).getDirect(), 0, Color_.BLACK);
+        int index = -1;
         for (EnemyTank enemyTank : enemyTanks) {
-            drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 1, Color_.BLACK);
-
+            if (enemyTank.isLive) {
+                drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 1, Color_.BLACK);
+            } else {
+                index = enemyTanks.indexOf(enemyTank);
+            }
+        }
+        if (index != -1) {
+            enemyTanks.remove(index);
         }
         for (Fire bullet : bullets) {
             bullet.draw(g);
@@ -141,36 +172,21 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         for (Fire bullet : enemyBullets) {
             bullet.draw(g);
         }
+
+        for (int i = 0; i < bombs.size(); i++) {
+            Bomb bomb = bombs.get(i);
+            if (bomb.isLive) {
+                bomb.draw(g);
+            } else {
+                bombs.remove(bomb);
+            }
+        }
+
         // drawTank(200, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // drawTank(300, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // drawTank(400, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // repaint();
     }
-
-    private static Color getColor(Color_ color) {
-        switch (color) {
-            case RED:
-                return Color.RED;
-            case GREEN:
-                return Color.GREEN;
-            case BLUE:
-                return Color.BLUE;
-            case CYAN:
-                return Color.CYAN;
-            case MAGENTA:
-                return Color.MAGENTA;
-            case YELLOW:
-                return Color.YELLOW;
-            case BLACK:
-                return Color.BLACK;
-            case WHITE:
-                return Color.WHITE;
-            default:
-                return Color.WHITE;
-        }
-    }
-
-    public Fire fire = null;
 
     // private List<Fire> bullets = new ArrayList<>();
 
@@ -301,7 +317,9 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     public void keyPressed(KeyEvent e) {
 
         // System.out.println("keyPressed");
-
+        if (!myTank.isLive) {
+            return;
+        }
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
                 myTank.moveUp(RATE);
@@ -365,32 +383,77 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            for (Fire bullet : bullets) {
-                Iterator<EnemyTank> iterator = enemyTanks.iterator();
-                while (iterator.hasNext()) {
-                    EnemyTank enemyTank = iterator.next();
+            Iterator<Fire> bulletIterator = bullets.iterator();
+            while (bulletIterator.hasNext()) {
+                Fire bullet = bulletIterator.next();
+                Iterator<EnemyTank> tankIterator = enemyTanks.iterator();
+
+                while (tankIterator.hasNext()) {
+                    EnemyTank enemyTank = tankIterator.next();
                     if (hitTank(bullet, enemyTank)) {
-                        iterator.remove();
-                        bullet.isLive = false;
-                        enemyTank.isLive = false;
+                        // 移除击中的敌方坦克
                         killCount++;
+                        Bomb bomb = new Bomb(enemyTank.getX(), enemyTank.getY());
+                        bomb.setP(this);
+                        bombs.add(bomb);
+                        // tankIterator.remove();
+                        // 移除我方子弹
+                        bullet.isLive = false;
+
+                        // 敌方坦克的其他逻辑
+                        enemyTank.isLive = false;
+
                         System.out.println("功德+1");
                         bulletLimit = originBulletLimit + killCount;
-                        break;
+                        break; // 跳出内层循环，继续检查下一个子弹
                     }
                 }
-                // for (EnemyTank enemyTank : enemyTanks) {
-                // if (hitTank(bullet, enemyTank)) {
-                // enemyTanks.remove(enemyTank);
-                // bullets.remove(bullet);
-                // bullet.isLive = false;
-                // killCount++;
-                // bulletLimit = originBulletLimit + killCount;
-                // break;
-                // }
-                // }
+            }
+            for (int i = 0; i < enemyTanks.size(); i++) {
+                EnemyTank enemyTank = enemyTanks.get(i);
+                for (int j = 0; j < enemyBullets.size(); j++) {
+                    Fire bullet = enemyBullets.get(j);
+                    if (hitTank(bullet, myTank)) {
+                        // 移除击中的敌方坦克
+                        myTank.isLive = false;
+                        Bomb bomb = new Bomb(myTank.getX(), myTank.getY());
+                        bomb.setP(this);
+                        bombs.add(bomb);
+                    }
+                }
             }
             repaint();
+
+            // for (Fire bullet : bullets) {
+            // Iterator<EnemyTank> iterator = enemyTanks.iterator();
+            // while (iterator.hasNext()) {
+            // EnemyTank enemyTank = iterator.next();
+            // if (hitTank(bullet, enemyTank)) {
+            // iterator.remove();
+            // bullet.isLive = false;// 我方子弹的线程
+            // enemyTank.isLive = false;// 敌方坦克的射击线程
+            // killCount++;
+            // Bomb bomb = new Bomb(enemyTank.getX(), enemyTank.getY());
+            // bomb.setP(this);
+            // bombs.add(bomb);
+            // System.out.println("功德+1");
+            // bulletLimit = originBulletLimit + killCount;
+            // break;
+            // }
+            // }
+            // // for (EnemyTank enemyTank : enemyTanks) {
+            // // if (hitTank(bullet, enemyTank)) {
+            // // enemyTanks.remove(enemyTank);
+            // // bullets.remove(bullet);
+            // // bullet.isLive = false;
+            // // killCount++;
+            // // bulletLimit = originBulletLimit + killCount;
+            // // break;
+            // // }
+            // // }
+            // }
+            // repaint();
+
         }
     }
 
@@ -398,15 +461,13 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         switch (tank.getDirect()) {
             case 0:
             case 2:
-                if (bullet.x > tank.getX() && bullet.x < tank.getX() + 70 && bullet.y > tank.getY()
-                        && bullet.y < tank.getY() + 100) {
+                if (bullet.x > tank.getX() && bullet.x < tank.getX() + 70 && bullet.y > tank.getY() && bullet.y < tank.getY() + 100) {
                     return true;
                 }
                 break;
             case 1:
             case 3:
-                if (bullet.x > tank.getX() && bullet.x < tank.getX() + 100 && bullet.y > tank.getY()
-                        && bullet.y < tank.getY() + 70) {
+                if (bullet.x > tank.getX() && bullet.x < tank.getX() + 100 && bullet.y > tank.getY() && bullet.y < tank.getY() + 70) {
                     return true;
                 }
                 break;

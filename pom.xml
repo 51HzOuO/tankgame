@@ -29,6 +29,12 @@
             <version>5.10.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- 如果需要使用 JUnit Vintage Engine 来运行 JUnit 3 或 4 的测试 -->
         <!--
