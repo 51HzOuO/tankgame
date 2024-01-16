@@ -131,8 +131,12 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         g.drawImage(image, 100, 100, 108, 108, this);
 
         // moveTank();
-        drawTank(myTank.getX(), myTank.getY(), g, myTank.getDirect(), 0, Color_.RED);
-
+        if (myTank.isLive)
+            drawTank(myTank.getX(), myTank.getY(), g, myTank.getDirect(), 0, Color_.RED);
+        else {
+            g.setFont(new java.awt.Font("宋体", 1, 100));
+            g.drawString("GAMEOVER", 300, 300);
+        }
         // drawTank(enemyTanks.get(0).getX(), enemyTanks.get(0).getY(), g,
         // enemyTanks.get(0).getDirect(), 0, Color_.BLACK);
         // drawTank(enemyTanks.get(1).getX(), enemyTanks.get(1).getY(), g,
@@ -327,7 +331,9 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     public void keyPressed(KeyEvent e) {
 
         // System.out.println("keyPressed");
-
+        if (!myTank.isLive) {
+            return;
+        }
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
                 myTank.moveUp(RATE);
@@ -414,6 +420,19 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
                         System.out.println("功德+1");
                         bulletLimit = originBulletLimit + killCount;
                         break; // 跳出内层循环，继续检查下一个子弹
+                    }
+                }
+            }
+            for (int i = 0; i < enemyTanks.size(); i++) {
+                EnemyTank enemyTank = enemyTanks.get(i);
+                for (int j = 0; j < enemyBullets.size(); j++) {
+                    Fire bullet = enemyBullets.get(j);
+                    if (hitTank(bullet, myTank)) {
+                        // 移除击中的敌方坦克
+                        myTank.isLive = false;
+                        Bomb bomb = new Bomb(myTank.getX(), myTank.getY());
+                        bomb.setP(this);
+                        bombs.add(bomb);
                     }
                 }
             }

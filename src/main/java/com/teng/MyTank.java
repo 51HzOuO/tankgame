@@ -8,6 +8,8 @@ public class MyTank extends Tank {
         super(x, y, direct, panel);
     }
 
+    boolean isLive = true;
+
     @Override
     public void fire() {
 
