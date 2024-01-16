@@ -1,13 +1,19 @@
 package com.teng;
 
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.*;
 import java.util.Random;
 
 public class Bomb {
     int x, y;
     int life = 36;
+
     boolean isLive = true;
+    Panel_ p;
+    int i = 0;
+    Random random = new Random();
+    int times = random.nextInt(3) + 1;
+    int speed = random.nextInt(5) + 1;
+
 
     public Bomb(int x, int y) {
         this.x = x;
@@ -21,18 +27,9 @@ public class Bomb {
         }
     }
 
-    Panel_ p;
-
     public void setP(Panel_ p) {
         this.p = p;
     }
-
-    int i = 0;
-
-    Random random = new Random();
-    int times = random.nextInt(3) + 1;
-
-    int speed = random.nextInt(5) + 1;
 
     public void draw(Graphics g) {
         Image[] images = p.images;
