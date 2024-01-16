@@ -1,11 +1,7 @@
 package com.teng;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Iterator;
@@ -13,37 +9,31 @@ import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
-import javax.swing.JPanel;
-
-import java.awt.AlphaComposite;
-
 public class Panel_ extends JPanel implements KeyListener, Runnable {
+    public Fire fire = null;
     Random random = new Random();
     MyTank myTank;
     List<Fire> enemyBullets = new Vector<>();
     List<EnemyTank> enemyTanks = new Vector<>();
     List<Fire> bullets = new Vector<>();
-
     List<Bomb> bombs = new Vector<>();
-
     Image[] images = new Image[36];
+    int enemyTankCount = 10;
+    // private int x = 0;
+    // private int y = 0;
+    // private int direct = 0;
+    int originBulletLimit = 3;
+    int killCount = 0;
+    int bulletLimit = originBulletLimit + killCount;
+    // }
+    Color_[] values = Color_.values();
+    private int RATE = 4;
+
     {
         for (int i = 0; i < 36; i++) {
             images[i] = Toolkit.getDefaultToolkit().getImage("pic/ht/" + (i + 1) + ".png");
         }
     }
-
-    public void addBullet(Fire bullet) {
-        bullets.add(bullet);
-
-    }
-
-    public void addEnemyBullet(Fire bullet) {
-        enemyBullets.add(bullet);
-
-    }
-
-    int enemyTankCount = 10;
 
     public Panel_() {
         this.setBackground(Color.GRAY);
@@ -55,18 +45,27 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
 
     }
 
-    // private int x = 0;
-    // private int y = 0;
-    // private int direct = 0;
-    int originBulletLimit = 3;
-    int killCount = 0;
-    int bulletLimit = originBulletLimit + killCount;
-    private int RATE = 4;
-
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-
+    private static Color getColor(Color_ color) {
+        switch (color) {
+            case RED:
+                return Color.RED;
+            case GREEN:
+                return Color.GREEN;
+            case BLUE:
+                return Color.BLUE;
+            case CYAN:
+                return Color.CYAN;
+            case MAGENTA:
+                return Color.MAGENTA;
+            case YELLOW:
+                return Color.YELLOW;
+            case BLACK:
+                return Color.BLACK;
+            case WHITE:
+                return Color.WHITE;
+            default:
+                return Color.WHITE;
+        }
     }
 
     // public void moveTank(String key) {
@@ -90,8 +89,21 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     // break;
     // }
 
-    // }
-    Color_[] values = Color_.values();
+    public void addBullet(Fire bullet) {
+        bullets.add(bullet);
+
+    }
+
+    public void addEnemyBullet(Fire bullet) {
+        enemyBullets.add(bullet);
+
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -131,8 +143,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         g.drawImage(image, 100, 100, 108, 108, this);
 
         // moveTank();
-        if (myTank.isLive)
-            drawTank(myTank.getX(), myTank.getY(), g, myTank.getDirect(), 0, Color_.RED);
+        if (myTank.isLive) drawTank(myTank.getX(), myTank.getY(), g, myTank.getDirect(), 0, Color_.RED);
         else {
             g.setFont(new java.awt.Font("宋体", 1, 100));
             g.drawString("GAMEOVER", 300, 300);
@@ -176,31 +187,6 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         // drawTank(400, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // repaint();
     }
-
-    private static Color getColor(Color_ color) {
-        switch (color) {
-            case RED:
-                return Color.RED;
-            case GREEN:
-                return Color.GREEN;
-            case BLUE:
-                return Color.BLUE;
-            case CYAN:
-                return Color.CYAN;
-            case MAGENTA:
-                return Color.MAGENTA;
-            case YELLOW:
-                return Color.YELLOW;
-            case BLACK:
-                return Color.BLACK;
-            case WHITE:
-                return Color.WHITE;
-            default:
-                return Color.WHITE;
-        }
-    }
-
-    public Fire fire = null;
 
     // private List<Fire> bullets = new ArrayList<>();
 
@@ -475,15 +461,13 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         switch (tank.getDirect()) {
             case 0:
             case 2:
-                if (bullet.x > tank.getX() && bullet.x < tank.getX() + 70 && bullet.y > tank.getY()
-                        && bullet.y < tank.getY() + 100) {
+                if (bullet.x > tank.getX() && bullet.x < tank.getX() + 70 && bullet.y > tank.getY() && bullet.y < tank.getY() + 100) {
                     return true;
                 }
                 break;
             case 1:
             case 3:
-                if (bullet.x > tank.getX() && bullet.x < tank.getX() + 100 && bullet.y > tank.getY()
-                        && bullet.y < tank.getY() + 70) {
+                if (bullet.x > tank.getX() && bullet.x < tank.getX() + 100 && bullet.y > tank.getY() && bullet.y < tank.getY() + 70) {
                     return true;
                 }
                 break;
