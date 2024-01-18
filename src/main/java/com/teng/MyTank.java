@@ -10,15 +10,19 @@ public class MyTank extends Tank {
 
     boolean isLive = true;
 
+    // 来自Tank的抽象方法
     @Override
     public void fire() {
 
+        // 类型为Fire的bullet变量
         Fire bullet;
+        // 如果子弹的数量达到了子弹的限制则直接退出不发射子弹
         if (panel instanceof Panel_) {
-            if (((Panel_) panel).bullets.size() == ((Panel_) panel).bulletLimit) {
+            if ( ( (Panel_) panel).bullets.size() == ((Panel_) panel).bulletLimit) {
                 return;
             }
         }
+        // 否则根据方向发射子弹
         switch (direct) {
             case 0:
                 bullet = new Fire(x + 35, y, direct);

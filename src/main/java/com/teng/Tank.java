@@ -2,6 +2,7 @@ package com.teng;
 
 import javax.swing.JPanel;
 
+// 抽象类 Tank
 public abstract class Tank {
     protected int x;
     protected int y;

@@ -18,26 +18,36 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     List<Fire> bullets = new Vector<>();
     List<Bomb> bombs = new Vector<>();
     Image[] images = new Image[36];
+
+    // 设定10个敌方坦克
     int enemyTankCount = 10;
     // private int x = 0;
     // private int y = 0;
     // private int direct = 0;
+
+    // 初始限制三个子弹
     int originBulletLimit = 3;
     int killCount = 0;
+    // 杀的越多子弹数量越多？
     int bulletLimit = originBulletLimit + killCount;
-    // }
+
+    // 包含所有颜色的数组
     Color_[] values = Color_.values();
+    // 移动速度
     private int RATE = 4;
 
+    // 动图字典
     {
         for (int i = 0; i < 36; i++) {
             images[i] = Toolkit.getDefaultToolkit().getImage("pic/ht/" + (i + 1) + ".png");
         }
     }
 
+    // 初始化panel
     public Panel_() {
         this.setBackground(Color.GRAY);
 
+        // 自己坦克的出生位置
         myTank = new MyTank(100, 100, 0, this);
         for (int i = 0; i < enemyTankCount; i++) {
             enemyTanks.add(new EnemyTank(random.nextInt(1100), random.nextInt(700), random.nextInt(4), this));
@@ -99,12 +109,17 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
 
     }
 
+    // 来自java.awt.Component类
+    // 当需要自定义绘制AWT组件的方法时，会重写paint
     @Override
     public void paint(Graphics g) {
+        // 保留父类的绘制行为
         super.paint(g);
 
     }
 
+    // 来自javax.swing.JComponent类
+    // 自定义绘制Swing组件的方法
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -118,43 +133,55 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         g.drawString("KILL COUNT:" + killCount, 800, 250);
         g.setColor(getColor(values[random.nextInt(values.length)]));
         g.drawString("···", 10, 50);
-        // Graphics2D g2d = (Graphics2D) g.create();
-        // g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
-        // g2d.setColor(setColor());
-        // g2d.fillRect(0, 0, 20, 100);
-        // g2d.fillRect(50, 0, 20, 100);
 
-        // g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-        // g2d.fillRect(20, 20, 30, 60);
+        /*
+        // 使用Graphics2D绘制更复杂的图像
+        // Graphics2D是Graphics的拓展
+         Graphics2D g2d = (Graphics2D) g.create();
+         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+         g2d.setColor(setColor());
+         g2d.fillRect(0, 0, 20, 100);
+         g2d.fillRect(50, 0, 20, 100);
 
-        // g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
-        // g2d.fillOval(20, 50 - 15, 30, 30);
-        // g2d.fillRect(35 - 2, 0, 4, 50);
+         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+         g2d.fillRect(20, 20, 30, 60);
 
-        // g2d.dispose(); // Dispose of this graphics context and release any system
-        // resources that it is
-        // // using
+         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
+         g2d.fillOval(20, 50 - 15, 30, 30);
+         g2d.fillRect(35 - 2, 0, 4, 50);
 
+         g2d.dispose(); // Dispose of this graphics context and release any system
+         resources that it is
+         // using
+         */
+
+        // 出生位置的图片
         Image image = Toolkit.getDefaultToolkit().getImage("pic/bj.jpg");
 
-        // Image image2 =
-        // Toolkit.getDefaultToolkit().getImage(Panel_.class.getResource("bj.jpg"));
 
         g.drawImage(image, 100, 100, 108, 108, this);
 
         // moveTank();
-        if (myTank.isLive) drawTank(myTank.getX(), myTank.getY(), g, myTank.getDirect(), 0, Color_.RED);
+
+        // 当坦克还活着则绘制坦克
+        // 如果if后面只有一个语句可以省略中括号
+        if (myTank.isLive)
+            drawTank(myTank.getX(), myTank.getY(), g, myTank.getDirect(), 0, Color_.RED);
         else {
             g.setFont(new java.awt.Font("宋体", 1, 100));
             g.drawString("GAMEOVER", 300, 300);
         }
+
         // drawTank(enemyTanks.get(0).getX(), enemyTanks.get(0).getY(), g,
         // enemyTanks.get(0).getDirect(), 0, Color_.BLACK);
         // drawTank(enemyTanks.get(1).getX(), enemyTanks.get(1).getY(), g,
         // enemyTanks.get(1).getDirect(), 0, Color_.BLACK);
         // drawTank(enemyTanks.get(2).getX(), enemyTanks.get(2).getY(), g,
         // enemyTanks.get(2).getDirect(), 0, Color_.BLACK);
+
+
         int index = -1;
+        //for-each循环
         for (EnemyTank enemyTank : enemyTanks) {
             if (enemyTank.isLive) {
                 drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 1, Color_.BLACK);
@@ -162,17 +189,20 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
                 index = enemyTanks.indexOf(enemyTank);
             }
         }
+        // 如果列表中的坦克已经死亡，则根据index从列表中删除掉
         if (index != -1) {
             enemyTanks.remove(index);
         }
+        // 绘制每一个子弹
         for (Fire bullet : bullets) {
             bullet.draw(g);
         }
-
+        // 绘制敌方子弹
         for (Fire bullet : enemyBullets) {
             bullet.draw(g);
         }
 
+        // ？绘制死亡动画？
         for (int i = 0; i < bombs.size(); i++) {
             Bomb bomb = bombs.get(i);
             if (bomb.isLive) {
@@ -231,18 +261,23 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         switch (direct) {
             case 0: // 上
                 Graphics2D g2d = (Graphics2D) g.create();
+
+                // 两个轮胎
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
                 g2d.fill3DRect(x, y, 20, 100, false);
                 g2d.fill3DRect(x + 50, y, 20, 100, false);
 
+                // 车身
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
                 g2d.fill3DRect(x + 20, y + 20, 30, 60, false);
 
+                // 炮塔
                 g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
                 g2d.fillOval(x + 20, y + 35, 30, 30);
                 if (type == 0) {
                     g2d.setColor(getColor(values[random.nextInt(values.length)]));
                 }
+                // 炮管
                 g2d.fill3DRect(x + 35, y, 4, 50, false);
 
                 g2d.dispose();
@@ -308,11 +343,13 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
 
     }
 
+    // 来自JFrame的keylistener接口
     @Override
     public void keyTyped(KeyEvent e) {
 
     }
 
+    // 来自JFrame的keylistener接口
     @Override
     public void keyPressed(KeyEvent e) {
 
@@ -370,11 +407,13 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
 
     }
 
+    // 来自JFrame的keylistener接口
     @Override
     public void keyReleased(KeyEvent e) {
 
     }
 
+    // 来自Runnable接口
     @Override
     public void run() {
         while (true) {
