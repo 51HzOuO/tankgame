@@ -40,6 +40,8 @@ public class Fire implements Runnable {
     private boolean shouldContinueMoving() {
         // 根据子弹位置和方向判断是否继续移动
         // 示例条件，需要根据您的游戏逻辑调整
+
+        // 根据子弹是否飞出屏幕外判断
         return x >= 0 && x <= panel.getWidth() && y >= 0 && y <= panel.getHeight();
     }
 
@@ -62,6 +64,7 @@ public class Fire implements Runnable {
     }
 
     public void draw(Graphics g) {
+        // 画出子弹
         g.setColor(Color.WHITE);
         g.fillRect(x, y, 5, 5);
     }

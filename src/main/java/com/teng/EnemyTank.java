@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import javax.swing.JPanel;
 
+// 继承Tank父类
 public class EnemyTank extends Tank implements Runnable {
 
     Vector<Fire> fires = new Vector<Fire>();
@@ -16,12 +17,14 @@ public class EnemyTank extends Tank implements Runnable {
 
     boolean isLive = true;
 
+    // 来自Runnable接口
     @Override
     public void run() {
         Random random = new Random();
         while (isLive) {
             try {
 
+                // 如果随机数小于3， 那就在4里面随机一个数作为方向
                 if (random.nextInt(10) < 3) {
                     direct = random.nextInt(4);
                 }

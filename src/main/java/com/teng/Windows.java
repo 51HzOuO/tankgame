@@ -11,12 +11,14 @@ public class Windows extends JFrame {
     // panel.repaint();
     // }
 
-    public Windows() {
+    //Windows是一个构造函数
+    public Windows(String name) {
         this.setSize(1200, 800);
         new Thread(panel).start();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(panel);
         this.setVisible(true);
         this.addKeyListener(panel);
+        this.setTitle(name);
     }
 }
