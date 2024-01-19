@@ -1,21 +1,20 @@
 package com.teng;
 
+import javax.swing.*;
 import java.util.Random;
 import java.util.Vector;
-
-import javax.swing.JPanel;
 
 // 继承Tank父类
 public class EnemyTank extends Tank implements Runnable {
 
     Vector<Fire> fires = new Vector<Fire>();
+    boolean isLive = true;
+    Panel_ p = (Panel_) panel;
 
     public EnemyTank(int x, int y, int direct, JPanel panel) {
         super(x, y, direct, panel);
         new Thread(this).start();
     }
-
-    boolean isLive = true;
 
     // 来自Runnable接口
     @Override
@@ -52,8 +51,6 @@ public class EnemyTank extends Tank implements Runnable {
         }
 
     }
-
-    Panel_ p = (Panel_) panel;
 
     @Override
     public void fire() {

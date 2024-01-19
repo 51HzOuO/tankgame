@@ -1,6 +1,6 @@
 package com.teng;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 // 抽象类 Tank
 public abstract class Tank {

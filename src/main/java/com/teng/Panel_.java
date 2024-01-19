@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -12,6 +13,9 @@ import java.util.Vector;
 public class Panel_ extends JPanel implements KeyListener, Runnable {
     public Fire fire = null;
     Random random = new Random();
+
+
+    EnemyTankInfo enemyTankInfo = null;
     MyTank myTank;
     List<Fire> enemyBullets = new Vector<>();
     List<EnemyTank> enemyTanks = new Vector<>();
@@ -44,14 +48,27 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     }
 
     // 初始化panel
-    public Panel_() {
+    public Panel_(boolean again, EnemyTankInfo enemyTankInfo) {
+
         this.setBackground(Color.GRAY);
 
         // 自己坦克的出生位置
         myTank = new MyTank(100, 100, 0, this);
-        for (int i = 0; i < enemyTankCount; i++) {
-            enemyTanks.add(new EnemyTank(random.nextInt(1100), random.nextInt(700), random.nextInt(4), this));
+        if (!again) {
+            for (int i = 0; i < enemyTankCount; i++) {
+                enemyTanks.add(new EnemyTank(random.nextInt(1100), random.nextInt(700), random.nextInt(4), this));
+            }
+        } else {
+            enemyTanks.clear();
+            int[] x = enemyTankInfo.x;
+            int[] y = enemyTankInfo.y;
+            int[] direct = enemyTankInfo.direct;
+            for (int i = 0; i < enemyTankInfo.nums; i++) {
+
+                enemyTanks.add(new EnemyTank(x[i], y[i], direct[i], this));
+            }
         }
+
 
     }
 
@@ -165,8 +182,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
 
         // 当坦克还活着则绘制坦克
         // 如果if后面只有一个语句可以省略中括号
-        if (myTank.isLive)
-            drawTank(myTank.getX(), myTank.getY(), g, myTank.getDirect(), 0, Color_.RED);
+        if (myTank.isLive) drawTank(myTank.getX(), myTank.getY(), g, myTank.getDirect(), 0, Color_.RED);
         else {
             g.setFont(new java.awt.Font("宋体", 1, 100));
             g.drawString("GAMEOVER", 300, 300);
@@ -417,6 +433,16 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     @Override
     public void run() {
         while (true) {
+            if (enemyTanks.size() == 0) {
+                JOptionPane.showMessageDialog(null, "你赢了");
+                new File("src/main/resources/panel.ser").delete();
+                System.exit(0);
+            }
+            if (!myTank.isLive) {
+                JOptionPane.showMessageDialog(null, "你输了");
+                new File("src/main/resources/panel.ser").delete();
+                System.exit(0);
+            }
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {

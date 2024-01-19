@@ -1,14 +1,14 @@
 package com.teng;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class MyTank extends Tank {
+
+    boolean isLive = true;
 
     public MyTank(int x, int y, int direct, JPanel panel) {
         super(x, y, direct, panel);
     }
-
-    boolean isLive = true;
 
     // 来自Tank的抽象方法
     @Override
@@ -18,7 +18,7 @@ public class MyTank extends Tank {
         Fire bullet;
         // 如果子弹的数量达到了子弹的限制则直接退出不发射子弹
         if (panel instanceof Panel_) {
-            if ( ( (Panel_) panel).bullets.size() == ((Panel_) panel).bulletLimit) {
+            if (((Panel_) panel).bullets.size() == ((Panel_) panel).bulletLimit) {
                 return;
             }
         }
