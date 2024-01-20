@@ -17,35 +17,39 @@ import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
+import static com.teng.Tank.getTankRectangle;
+
 public class Panel_ extends JPanel implements KeyListener, Runnable {
     public Fire fire = null;
     Random random = new Random();
-
-
     EnemyTankInfo enemyTankInfo = null;
     MyTank myTank;
+    int IronPlateCount = random.nextInt(8) + 3;
     List<Fire> enemyBullets = new Vector<>();
+    List<IronPlate> ironPlates = new Vector<>();
     List<EnemyTank> enemyTanks = new Vector<>();
     List<Fire> bullets = new Vector<>();
     List<Bomb> bombs = new Vector<>();
     Image[] images = new Image[36];
-
     // 设定10个敌方坦克
-    int enemyTankCount = 10;
+    int enemyTankCount = 3;
+    // 初始限制1个子弹
+    int originBulletLimit = 1;
     // private int x = 0;
     // private int y = 0;
     // private int direct = 0;
-
-    // 初始限制1个子弹
-    int originBulletLimit = 1;
     int killCount = 0;
     // 杀的越多子弹数量越多？
     int bulletLimit = originBulletLimit;
-
     // 包含所有颜色的数组
     Color_[] values = Color_.values();
+    int runTimes = random.nextInt(1200);
     // 移动速度
-    private int RATE = 4;
+    private int RATE = 1;
+
+    {
+        Tank.setPanel_(this);
+    }
 
     // 动图字典
     {
@@ -58,12 +62,20 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     public Panel_(boolean again, EnemyTankInfo enemyTankInfo) {
 
         this.setBackground(Color.GRAY);
-
+        initIronPlates();
         // 自己坦克的出生位置
         myTank = new MyTank(100, 100, 0, this);
         if (!again) {
-            for (int i = 0; i < enemyTankCount; i++) {
-                enemyTanks.add(new EnemyTank(random.nextInt(1100), random.nextInt(700), random.nextInt(4), this));
+            for (int i = 0; i < enemyTankCount; ) {
+                int x = random.nextInt(1100);
+                int y = random.nextInt(700);
+                int direct = random.nextInt(4);
+
+                EnemyTank newTank = new EnemyTank(x, y, direct, this);
+                if (!isOverlapWithOtherTanks(newTank)) {
+                    enemyTanks.add(newTank);
+                    i++;
+                }
             }
         } else {
             enemyTanks.clear();
@@ -71,7 +83,6 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
             int[] y = enemyTankInfo.y;
             int[] direct = enemyTankInfo.direct;
             for (int i = 0; i < enemyTankInfo.nums; i++) {
-
                 enemyTanks.add(new EnemyTank(x[i], y[i], direct[i], this));
             }
         }
@@ -102,6 +113,21 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         }
     }
 
+    private void initIronPlates() {
+        for (int i = 0; i < IronPlateCount; i++) {
+            int x = random.nextInt(800);
+            int y = random.nextInt(600);
+            int width;
+            if (Math.random() > 0.5) {
+                width = Math.random() > 0.5 ? 20 : 100;
+            } else {
+                width = Math.random() > 0.5 ? 60 : 60;
+            }
+            IronPlate ironPlate = new IronPlate(x, y, width, 120 - width);
+            ironPlates.add(ironPlate);
+        }
+    }
+
     // public void moveTank(String key) {
     // char c = Character.toLowerCase(key.charAt(0));
     // switch (c) {
@@ -123,6 +149,24 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     // break;
     // }
 
+    private boolean isOverlapWithOtherTanks(EnemyTank newTank) {
+        Rectangle newTankRect = getTankRectangle(newTank);
+        Rectangle myTankRect = getTankRectangle(myTank);
+
+        if (newTankRect.intersects(myTankRect)) {
+            return true;
+        }
+
+        for (Tank tank : enemyTanks) {
+            Rectangle existingTankRect = getTankRectangle(tank);
+            if (newTankRect.intersects(existingTankRect)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void addBullet(Fire bullet) {
         bullets.add(bullet);
 
@@ -142,6 +186,8 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
 
     }
 
+    // private List<Fire> bullets = new ArrayList<>();
+
     // 来自javax.swing.JComponent类
     // 自定义绘制Swing组件的方法
     @Override
@@ -149,14 +195,14 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         super.paintComponent(g);
 
         Color_[] values = Color_.values();
-        g.setFont(new Font("宋体", 1, 30));
-        g.drawString("wasd移动  1,2,3,4变速", 800, 50);
+        g.setFont(new Font("宋体", 1, 20));
+        g.drawString("WASD移动", 800, 50);
         g.drawString("j发射子弹", 800, 100);
         g.drawString("当前可发射子弹数：" + (originBulletLimit + killCount / 2 - bullets.size()) + "/" + bulletLimit, 800, 150);
         g.drawString("EXTRA BULLET:" + killCount / 2, 800, 200);
         g.drawString("KILL COUNT:" + killCount, 800, 250);
         g.setColor(getColor(values[random.nextInt(values.length)]));
-        g.drawString("···", 10, 50);
+        g.drawString("" + runTimes, 10, 50);
 
         /*
         // 使用Graphics2D绘制更复杂的图像
@@ -225,6 +271,10 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
             bullet.draw(g);
         }
 
+        for (IronPlate ironPlate : ironPlates) {
+            g.setColor(Color.DARK_GRAY); // 设置铁板颜色
+            g.fillRect(ironPlate.getX(), ironPlate.getY(), ironPlate.getWidth(), ironPlate.getHeight());
+        }
         // ？绘制死亡动画？
         for (int i = 0; i < bombs.size(); i++) {
             Bomb bomb = bombs.get(i);
@@ -240,8 +290,6 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         // drawTank(400, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // repaint();
     }
-
-    // private List<Fire> bullets = new ArrayList<>();
 
     private void drawTank(int x, int y, Graphics g, int direct, int type, Color_ color) {
 
@@ -407,7 +455,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
                 break;
             case KeyEvent.VK_NUMPAD1:
             case KeyEvent.VK_1:
-                RATE = 4;
+                RATE = 1;
 
                 break;
             case KeyEvent.VK_NUMPAD2:
@@ -436,6 +484,8 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
 
     }
 
+    // 来自Runnable接口
+
     private void career() throws IOException {
         File file = new File("src\\main\\resources\\career.dat");
         boolean theFirstTime = false;
@@ -461,10 +511,37 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         br.close();
     }
 
-    // 来自Runnable接口
+    public boolean hitIronPlate(Fire bullet) {
+        Rectangle bulletRect = new Rectangle(bullet.x, bullet.y, 5, 5);
+        for (IronPlate ironPlate : ironPlates) {
+            if (bulletRect.intersects(ironPlate.getRectangle())) {
+                return true; // 子弹击中铁板
+            }
+        }
+        return false; // 子弹未击中铁板
+    }
+
     @Override
     public void run() {
+
         while (true) {
+            runTimes--;
+            if (runTimes == 0) {
+                runTimes = random.nextInt(1500) + 1000;
+                enemyTankCount++;
+                for (; ; ) {
+                    int x = random.nextInt(1100);
+                    int y = random.nextInt(700);
+                    int direct = random.nextInt(4);
+
+                    EnemyTank newTank = new EnemyTank(x, y, direct, this);
+                    if (!isOverlapWithOtherTanks(newTank)) {
+                        enemyTanks.add(newTank);
+                        break;
+                    }
+                }
+
+            }
             if (enemyTanks.size() == 0) {
                 try {
                     career();
@@ -491,30 +568,36 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
                 e.printStackTrace();
             }
             for (Fire bullet : bullets) {
+                // 检查子弹是否击中铁板
+                if (hitIronPlate(bullet)) {
+                    bullet.isLive = false; // 销毁子弹
+                    continue; // 继续检查下一颗子弹
+                }
+
                 for (EnemyTank enemyTank : enemyTanks) {
                     if (hitTank(bullet, enemyTank)) {
-                        // 移除击中的敌方坦克
+                        // 子弹与敌方坦克的碰撞处理
                         killCount++;
                         Bomb bomb = new Bomb(enemyTank.getX(), enemyTank.getY());
                         bomb.setP(this);
                         bombs.add(bomb);
-                        // tankIterator.remove();
-                        // 移除我方子弹
                         bullet.isLive = false;
-
-                        // 敌方坦克的其他逻辑
                         enemyTank.isLive = false;
-
                         System.out.println("功德+1");
                         bulletLimit = originBulletLimit + killCount / 2;
                         break; // 跳出内层循环，继续检查下一个子弹
                     }
                 }
             }
+
             for (int i = 0; i < enemyTanks.size(); i++) {
                 EnemyTank enemyTank = enemyTanks.get(i);
                 for (int j = 0; j < enemyBullets.size(); j++) {
                     Fire bullet = enemyBullets.get(j);
+                    if (hitIronPlate(bullet)) {
+                        bullet.isLive = false; // 销毁子弹
+                        continue; // 继续检查下一颗子弹
+                    }
                     if (hitTank(bullet, myTank)) {
                         // 移除击中的敌方坦克
                         myTank.isLive = false;

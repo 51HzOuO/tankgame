@@ -4,11 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4e67e57d-434b-4fb4-b846-504caa3e3ab5" name="Changes" comment="fix: ThreadError,career problem">
+    <list default="true" id="4e67e57d-434b-4fb4-b846-504caa3e3ab5" name="Changes" comment="fix: something">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/teng/IronPlate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/career.dat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/teng/EnemyTank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teng/EnemyTank.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/teng/Fire.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teng/Fire.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/teng/Panel_.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teng/Panel_.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/teng/Tank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teng/Tank.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/panel.ser" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/teng/EnemyTank.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teng/EnemyTank.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/teng/Panel_.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teng/Panel_.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/teng/Tank.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teng/Tank.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/panel.ser" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -98,7 +106,7 @@
       <workItem from="1705672820483" duration="5221000" />
       <workItem from="1705678064041" duration="2954000" />
       <workItem from="1705681768196" duration="7862000" />
-      <workItem from="1705737921948" duration="1430000" />
+      <workItem from="1705737921948" duration="10054000" />
     </task>
     <task id="LOCAL-00001" summary="add:  career">
       <option name="closed" value="true" />
@@ -116,7 +124,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705733121929</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="fix: something">
+      <option name="closed" value="true" />
+      <created>1705739707537</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1705739707537</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -158,6 +174,7 @@
     <MESSAGE value="add:  cundang" />
     <MESSAGE value="add:  career" />
     <MESSAGE value="fix: ThreadError,career problem" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: ThreadError,career problem" />
+    <MESSAGE value="fix: something" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: something" />
   </component>
 </project>

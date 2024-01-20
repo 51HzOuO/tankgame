@@ -24,7 +24,7 @@ public class Fire implements Runnable {
         while (shouldContinueMoving() && isLive) {
             move();
             try {
-                Thread.sleep(5); // 控制子弹移动速度
+                Thread.sleep(15); // 控制子弹移动速度
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

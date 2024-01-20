@@ -29,16 +29,16 @@ public class EnemyTank extends Tank implements Runnable {
                 }
                 switch (direct) {
                     case 0:
-                        moveUp(4);
+                        moveUp(1);
                         break;
                     case 1:
-                        moveRight(4);
+                        moveRight(1);
                         break;
                     case 2:
-                        moveDown(4);
+                        moveDown(1);
                         break;
                     case 3:
-                        moveLeft(4);
+                        moveLeft(1);
                         break;
                 }
 
