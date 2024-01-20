@@ -36,11 +36,11 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     // private int y = 0;
     // private int direct = 0;
 
-    // 初始限制三个子弹
-    int originBulletLimit = 3;
+    // 初始限制1个子弹
+    int originBulletLimit = 1;
     int killCount = 0;
     // 杀的越多子弹数量越多？
-    int bulletLimit = originBulletLimit + killCount;
+    int bulletLimit = originBulletLimit;
 
     // 包含所有颜色的数组
     Color_[] values = Color_.values();
@@ -152,7 +152,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         g.setFont(new Font("宋体", 1, 30));
         g.drawString("wasd移动  1,2,3,4变速", 800, 50);
         g.drawString("j发射子弹", 800, 100);
-        g.drawString("当前可发射子弹数：" + (bulletLimit - bullets.size()) + "/" + originBulletLimit, 800, 150);
+        g.drawString("当前可发射子弹数：" + (originBulletLimit + killCount / 2 - bullets.size()) + "/" + bulletLimit, 800, 150);
         g.drawString("EXTRA BULLET:" + killCount / 2, 800, 200);
         g.drawString("KILL COUNT:" + killCount, 800, 250);
         g.setColor(getColor(values[random.nextInt(values.length)]));
@@ -466,23 +466,23 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     public void run() {
         while (true) {
             if (enemyTanks.size() == 0) {
-                JOptionPane.showMessageDialog(null, "你赢了");
                 try {
                     career();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 new File("src/main/resources/panel.ser").delete();
+                JOptionPane.showMessageDialog(null, "你赢了");
                 System.exit(0);
             }
             if (!myTank.isLive) {
-                JOptionPane.showMessageDialog(null, "你输了");
                 try {
                     career();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 new File("src/main/resources/panel.ser").delete();
+                JOptionPane.showMessageDialog(null, "你输了");
                 System.exit(0);
             }
             try {
@@ -506,7 +506,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
                         enemyTank.isLive = false;
 
                         System.out.println("功德+1");
-                        bulletLimit = originBulletLimit + killCount;
+                        bulletLimit = originBulletLimit + killCount / 2;
                         break; // 跳出内层循环，继续检查下一个子弹
                     }
                 }
