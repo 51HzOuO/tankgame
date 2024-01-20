@@ -32,9 +32,9 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     List<Bomb> bombs = new Vector<>();
     Image[] images = new Image[36];
     // 设定10个敌方坦克
-    int enemyTankCount = 3;
+    int enemyTankCount = 5;
     // 初始限制1个子弹
-    int originBulletLimit = 1;
+    int originBulletLimit = 2;
     // private int x = 0;
     // private int y = 0;
     // private int direct = 0;
@@ -43,7 +43,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     int bulletLimit = originBulletLimit;
     // 包含所有颜色的数组
     Color_[] values = Color_.values();
-    int runTimes = random.nextInt(1200);
+    int runTimes = random.nextInt(2500) + 2000;
     // 移动速度
     private int RATE = 1;
 
@@ -527,7 +527,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         while (true) {
             runTimes--;
             if (runTimes == 0) {
-                runTimes = random.nextInt(1500) + 1000;
+                runTimes = random.nextInt(2500) + 2000;
                 enemyTankCount++;
                 for (; ; ) {
                     int x = random.nextInt(1100);

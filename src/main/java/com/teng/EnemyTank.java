@@ -42,9 +42,11 @@ public class EnemyTank extends Tank implements Runnable {
                         break;
                 }
 
-                Thread.sleep(random.nextInt(1000) + 1000);
-                fire();
-                Thread.sleep(random.nextInt(1000) + 1000);
+                Thread.sleep(random.nextInt(500) + 500);
+                if (random.nextInt(10) <2) {
+                    fire();
+                }
+                Thread.sleep(random.nextInt(500) + 500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

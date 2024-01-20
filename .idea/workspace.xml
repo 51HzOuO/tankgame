@@ -5,18 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e67e57d-434b-4fb4-b846-504caa3e3ab5" name="Changes" comment="fix: something">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/teng/IronPlate.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/career.dat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/teng/EnemyTank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teng/EnemyTank.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/teng/Fire.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teng/Fire.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/teng/Panel_.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teng/Panel_.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/teng/Tank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/teng/Tank.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/panel.ser" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/teng/EnemyTank.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teng/EnemyTank.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/teng/Fire.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teng/Fire.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/teng/Panel_.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teng/Panel_.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/teng/Tank.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/teng/Tank.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/panel.ser" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -34,11 +30,11 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="dev_2" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="RESET_MODE" value="MIXED" />
+    <option name="RESET_MODE" value="HARD" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -69,28 +65,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Application.App.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/51Hz/Desktop/Demo/tankgame&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Application.App.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "dev",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/51Hz/Desktop/Demo/tankgame",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -156,7 +152,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="main" />
+                        <option value="dev" />
                       </list>
                     </value>
                   </entry>
