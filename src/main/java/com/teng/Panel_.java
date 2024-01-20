@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Vector;
@@ -32,7 +31,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     Image[] images = new Image[36];
 
     // 设定10个敌方坦克
-    int enemyTankCount = 1;
+    int enemyTankCount = 10;
     // private int x = 0;
     // private int y = 0;
     // private int direct = 0;
@@ -457,7 +456,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         String winOrLose = myTank.isLive ? "WIN" : "LOSE";
-        ps.println((Integer.parseInt(line.charAt(0) + "") + 1) + "|" + winOrLose + "|" + killCount + "/" + enemyTankCount + "|" + dtf.format(now));
+        ps.println((Integer.parseInt(line.split("\\|")[0]) + 1) + "|" + winOrLose + "|" + killCount + "/" + enemyTankCount + "|" + dtf.format(now));
         ps.close();
         br.close();
     }
@@ -491,13 +490,8 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Iterator<Fire> bulletIterator = bullets.iterator();
-            while (bulletIterator.hasNext()) {
-                Fire bullet = bulletIterator.next();
-                Iterator<EnemyTank> tankIterator = enemyTanks.iterator();
-
-                while (tankIterator.hasNext()) {
-                    EnemyTank enemyTank = tankIterator.next();
+            for (Fire bullet : bullets) {
+                for (EnemyTank enemyTank : enemyTanks) {
                     if (hitTank(bullet, enemyTank)) {
                         // 移除击中的敌方坦克
                         killCount++;
