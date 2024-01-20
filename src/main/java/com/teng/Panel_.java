@@ -4,7 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -24,7 +32,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     Image[] images = new Image[36];
 
     // 设定10个敌方坦克
-    int enemyTankCount = 10;
+    int enemyTankCount = 1;
     // private int x = 0;
     // private int y = 0;
     // private int direct = 0;
@@ -142,7 +150,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         super.paintComponent(g);
 
         Color_[] values = Color_.values();
-        g.setFont(new java.awt.Font("宋体", 1, 30));
+        g.setFont(new Font("宋体", 1, 30));
         g.drawString("wasd移动  1,2,3,4变速", 800, 50);
         g.drawString("j发射子弹", 800, 100);
         g.drawString("当前可发射子弹数：" + (bulletLimit - bullets.size()) + "/" + originBulletLimit, 800, 150);
@@ -184,7 +192,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         // 如果if后面只有一个语句可以省略中括号
         if (myTank.isLive) drawTank(myTank.getX(), myTank.getY(), g, myTank.getDirect(), 0, Color_.RED);
         else {
-            g.setFont(new java.awt.Font("宋体", 1, 100));
+            g.setFont(new Font("宋体", 1, 100));
             g.drawString("GAMEOVER", 300, 300);
         }
 
@@ -429,17 +437,52 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
 
     }
 
+    private void career() throws IOException {
+        File file = new File("src\\main\\resources\\career.dat");
+        boolean theFirstTime = false;
+        if (!file.exists()) {
+            file.createNewFile();
+            theFirstTime = true;
+        }
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        PrintStream ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(file, true)));
+        String line = null;
+        String temp;
+        while ((temp = br.readLine()) != null) {
+            line = temp;
+        }
+        if (theFirstTime) {
+            line = "0";
+        }
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        String winOrLose = myTank.isLive ? "WIN" : "LOSE";
+        ps.println((Integer.parseInt(line.charAt(0) + "") + 1) + "|" + winOrLose + "|" + killCount + "/" + enemyTankCount + "|" + dtf.format(now));
+        ps.close();
+        br.close();
+    }
+
     // 来自Runnable接口
     @Override
     public void run() {
         while (true) {
             if (enemyTanks.size() == 0) {
                 JOptionPane.showMessageDialog(null, "你赢了");
+                try {
+                    career();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 new File("src/main/resources/panel.ser").delete();
                 System.exit(0);
             }
             if (!myTank.isLive) {
                 JOptionPane.showMessageDialog(null, "你输了");
+                try {
+                    career();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 new File("src/main/resources/panel.ser").delete();
                 System.exit(0);
             }

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -53,10 +54,17 @@ public class Windows extends JFrame {
             public void windowClosing(WindowEvent e) {
                 // 在这里添加关闭前需要执行的代码
                 try {
-                    save();
-//                    System.out.println("非正常结束，已保存进度");
-                    Windows.this.dispose();
-                    JOptionPane.showMessageDialog(null, "非正常结束，已保存进度", "非正常结束", JOptionPane.INFORMATION_MESSAGE);
+                    int dialogResult = JOptionPane.showConfirmDialog(null, "是否需要存档?", "确认", JOptionPane.YES_NO_OPTION);
+                    if (dialogResult == JOptionPane.YES_OPTION) {
+                        Windows.this.dispose();
+                        save();
+                        JOptionPane.showMessageDialog(null, "非正常结束，已保存进度", "非正常结束", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        Windows.this.dispose();
+                        JOptionPane.showMessageDialog(null, "非正常结束，未保存进度", "非正常结束", JOptionPane.INFORMATION_MESSAGE);
+                        new File("src/main/resources/panel.ser").delete();
+
+                    }
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -66,23 +74,22 @@ public class Windows extends JFrame {
     }
 
     public void save() throws IOException {
-        if (!(panel.killCount == panel.enemyTankCount) && panel.myTank.isLive) {
-            try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("src/main/resources/panel.ser")))) {
 
-                //MyTank
-                oos.writeInt(panel.killCount);
-                oos.writeInt(panel.myTank.x);
-                oos.writeInt(panel.myTank.y);
-                oos.writeInt(panel.myTank.direct);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("src/main/resources/panel.ser")))) {
 
-                //EnemyTank
-                List<EnemyTank> enemyTanks = panel.enemyTanks;
-                EnemyTankInfo info = new EnemyTankInfo(enemyTanks.size());
-                for (EnemyTank enemyTank : enemyTanks) {
-                    info.setInfo(enemyTank.x, enemyTank.y, enemyTank.direct);
-                }
-                oos.writeObject(info);
+            //MyTank
+            oos.writeInt(panel.killCount);
+            oos.writeInt(panel.myTank.x);
+            oos.writeInt(panel.myTank.y);
+            oos.writeInt(panel.myTank.direct);
+
+            //EnemyTank
+            List<EnemyTank> enemyTanks = panel.enemyTanks;
+            EnemyTankInfo info = new EnemyTankInfo(enemyTanks.size());
+            for (EnemyTank enemyTank : enemyTanks) {
+                info.setInfo(enemyTank.x, enemyTank.y, enemyTank.direct);
             }
+            oos.writeObject(info);
         }
     }
 }
