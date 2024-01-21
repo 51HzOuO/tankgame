@@ -569,10 +569,13 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            Fire[] bullets = new Fire[this.bullets.size()];
+            int i1 = 0;
             for (Fire bullet : bullets) {
                 // 检查子弹是否击中铁板
                 if (hitIronPlate(bullet)) {
-                    bullet.isLive = false; // 销毁子弹
+//                    bullet.isLive = false; // 销毁子弹
+                    bullets[i1++] = bullet;
                     continue; // 继续检查下一颗子弹
                 }
 
@@ -583,13 +586,20 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
                         Bomb bomb = new Bomb(enemyTank.getX(), enemyTank.getY());
                         bomb.setP(this);
                         bombs.add(bomb);
-                        bullet.isLive = false;
+//                        bullet.isLive = false;
+                        bullets[i1++] = bullet;
                         enemyTank.isLive = false;
                         System.out.println("功德+1");
                         bulletLimit = originBulletLimit + killCount / 2;
                         enemyTanks.remove(enemyTank);
                         break; // 跳出内层循环，继续检查下一个子弹
                     }
+                }
+            }
+            for (Fire bullet : bullets) {
+                if (bullet != null) {
+                    bullet.isLive = false;
+                    this.bullets.remove(bullet);
                 }
             }
 
