@@ -61,6 +61,9 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
     // 初始化panel
     public Panel_(boolean again, EnemyTankInfo enemyTankInfo) {
 
+        EnemyTank.setEnemyTanks(enemyTanks);
+        SimpleAudioPlayer music = new SimpleAudioPlayer("src\\km" + (random.nextInt(4) + 1) + ".wav");
+        new Thread(music).start();
         this.setBackground(Color.GRAY);
         initIronPlates();
         // 自己坦克的出生位置
@@ -252,16 +255,12 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         int index = -1;
         //for-each循环
         for (EnemyTank enemyTank : enemyTanks) {
-            if (enemyTank.isLive) {
-                drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 1, Color_.BLACK);
-            } else {
-                index = enemyTanks.indexOf(enemyTank);
-            }
+
+            drawTank(enemyTank.getX(), enemyTank.getY(), g, enemyTank.getDirect(), 1, Color_.BLACK);
+
         }
         // 如果列表中的坦克已经死亡，则根据index从列表中删除掉
-        if (index != -1) {
-            enemyTanks.remove(index);
-        }
+
         // 绘制每一个子弹
         for (Fire bullet : bullets) {
             bullet.draw(g);
@@ -289,6 +288,10 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
         // drawTank(300, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // drawTank(400, 0, g, 1, 1, values[random.nextInt(values.length)]);
         // repaint();
+    }
+
+    public void showInfo(Graphics g) {
+
     }
 
     private void drawTank(int x, int y, Graphics g, int direct, int type, Color_ color) {
@@ -533,7 +536,6 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
                     int x = random.nextInt(1100);
                     int y = random.nextInt(700);
                     int direct = random.nextInt(4);
-
                     EnemyTank newTank = new EnemyTank(x, y, direct, this);
                     if (!isOverlapWithOtherTanks(newTank)) {
                         enemyTanks.add(newTank);
@@ -585,6 +587,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
                         enemyTank.isLive = false;
                         System.out.println("功德+1");
                         bulletLimit = originBulletLimit + killCount / 2;
+                        enemyTanks.remove(enemyTank);
                         break; // 跳出内层循环，继续检查下一个子弹
                     }
                 }
@@ -599,7 +602,7 @@ public class Panel_ extends JPanel implements KeyListener, Runnable {
                         continue; // 继续检查下一颗子弹
                     }
                     if (hitTank(bullet, myTank)) {
-                        // 移除击中的敌方坦克
+                        // 移除击中的我方坦克
                         myTank.isLive = false;
                         Bomb bomb = new Bomb(myTank.getX(), myTank.getY());
                         bomb.setP(this);

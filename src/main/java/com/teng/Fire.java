@@ -29,6 +29,11 @@ public class Fire implements Runnable {
                 Thread.currentThread().interrupt();
             }
         }
+        try {
+            Thread.sleep(20);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         Panel_ p = (Panel_) panel;
         p.enemyBullets.remove(this);
         if (p.bullets.remove(this)) {

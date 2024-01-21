@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 public class App {
-
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         int choice = JOptionPane.showOptionDialog(null, "欢迎来到坦克大战", "坦克大战", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[]{"新游戏", "读档", "查看战绩"}, null);
